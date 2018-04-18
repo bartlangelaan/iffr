@@ -6,10 +6,14 @@
     "start": "nodemon",
     "test": "npm run lint",
     "lint": "tslint ./src/**/*.ts",
+    "format": "npm run lint -- --fix",
     "format": "npm run lint -- --fix"
   },
   "dependencies": {
-    "koa": "^2.5.0"
+    "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-combine-routers": "^3.0.0",
+    "ts-custom-error": "^2.2.1"
   },
   "nodemonConfig": {
     "watch": [
@@ -23,6 +27,7 @@
   },
   "devDependencies": {
     "@types/koa": "^2.0.45",
+    "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-router": "^7.0.27",
     "koa-router": "^7.4.0",
     "nodemon": "^1.17.3",
