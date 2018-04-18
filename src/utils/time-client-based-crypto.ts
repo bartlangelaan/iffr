@@ -29,16 +29,6 @@ export default class TimeClientBasedCrypto {
     }
 
     if (parseInt(time, 10) + this.expirationTime < new Date().getTime()) {
-      console.log({
-        salt,
-        time,
-        text,
-        parsedTime: parseInt(time, 10),
-        parsedTimeDate: new Date(parseInt(time, 10)),
-        expirationTime: this.expirationTime,
-        now: new Date(),
-        nowTime: new Date().getTime(),
-      });
       throw new TokenExpiredError();
     }
 
