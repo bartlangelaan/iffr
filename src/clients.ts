@@ -1,4 +1,5 @@
 import { IRouterContext } from 'koa-router';
+import { getApiClientSalt } from './utils/environment';
 
 export interface Client {
   // The id is a public identifier for this client.
@@ -24,7 +25,7 @@ const CLIENTS: Client[] = [
   {
     id: 'website',
     redirect_uri: 'https://iffr.com/auth_callback',
-    salt: '2349s9df92',
+    salt: getApiClientSalt('WEBSITE'),
   },
 ];
 

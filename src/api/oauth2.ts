@@ -7,9 +7,10 @@ import { URL } from 'url';
 import login from '../services/tickettrigger/login';
 import { getClient } from '../clients';
 import TimeClientBasedCrypto from '../utils/time-client-based-crypto';
+import { getApiTokenSalt, getApiCodeSalt } from '../utils/environment';
 
-const codeCrypto = new TimeClientBasedCrypto(60, 'abc123');
-const tokenCrypto = new TimeClientBasedCrypto(24 * 60 * 60, 'def456');
+const codeCrypto = new TimeClientBasedCrypto(60, getApiCodeSalt());
+const tokenCrypto = new TimeClientBasedCrypto(24 * 60 * 60, getApiTokenSalt());
 
 const router = new Router({
   prefix: '/oauth2',
