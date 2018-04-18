@@ -5,6 +5,7 @@
     "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
-    "strict": true
-    }
+    "strict": true,
+    "noImplicitReturns": true
+  }
 }
