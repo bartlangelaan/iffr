@@ -117,6 +117,39 @@ router.post('/token', async ctx => {
 
 export default router;
 
+export function addAuthenticationState(
+  ctx: Router.IRouterContext,
+  next: () => void,
+): void | never {
+  const { authorization }: { authorization: string | undefined } = ctx.headers;
+  const { access_token }: { access_token: string | undefined } = ctx.query;
+
+  let token: string | null = null;
+
+  if (access_token) {
+    return ctx.throw(
+      400,
+      'Using access_token in the query is not supported. Use the authentication header.',
+    );
+  }
+  if (authorization) {
+    if (authorization.indexOf('Bearer ') !== 0) {
+      return ctx.throw(400, 'Authentication header token type not supported.');
+    }
+    token = authorization.substr('Bearer '.length);
+  }
+
+  if (token) {
+    try {
+      ctx.state.userUuid = tokenCrypto.decrypt(token);
+    } catch (error) {
+      return ctx.throw(403, error.message);
+    }
+  }
+
+  return next();
+}
+
 interface passtroughParams {
   client_id: string;
   state?: string;

@@ -29,3 +29,7 @@ export function getApiTokenSalt() {
 export function getApiCodeSalt() {
   return getOrGenerate('API_SALT_CODE', generateRandom);
 }
+
+export function getTicketTriggerPassword() {
+  return env['TICKET_TRIGGER_PASS'];
+}
