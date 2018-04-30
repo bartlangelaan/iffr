@@ -1,12 +1,12 @@
 import fetch from 'node-fetch';
 import { getTicketTriggerPassword } from '../../utils/environment';
 
+const basicAuthString = Buffer.from(
+  `iffr:${getTicketTriggerPassword()}`,
+).toString('base64');
+
 class TicketTriggerUserService {
   private async fetch(path: string) {
-    const basicAuthString = Buffer.from(
-      `iffr:${getTicketTriggerPassword()}`,
-    ).toString('base64');
-
     const f = await fetch(`https://tt.iffr.com${path}`, {
       headers: {
         Authorization: `Basic ${basicAuthString}`,
