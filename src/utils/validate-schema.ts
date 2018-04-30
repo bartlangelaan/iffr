@@ -1,24 +1,20 @@
 import { Validator } from 'jsonschema';
 
-const schemas = require('./api-response-schemas.json');
+const { definitions } = require('./api-response-schemas.json');
 const validator = new Validator();
 
-export default function validate(
-  schema: string,
-  thingToValidate: any,
-): boolean {
-  const result = validator.validate(
-    thingToValidate,
-    schemas['definitions'][schema],
-  );
+export function validate(schema: string, thingToValidate: any) {
+  const result = validator.validate(thingToValidate, definitions[schema]);
 
-  console.log(result);
-
-  return result.valid;
+  return result;
 }
 
 export function assure(schema: string, thingToValidate: any) {
-  if (!validate(schema, thingToValidate)) {
-    throw new Error('Object is not as expected.');
+  const result = validate(schema, thingToValidate);
+  if (!result.valid) {
+    const errString = result.errors.map(e => e.toString()).join('\n');
+    throw new Error(
+      `An instance of ${schema} is not as expected.\n\n` + errString,
+    );
   }
 }
