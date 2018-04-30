@@ -7,10 +7,12 @@
     "test": "npm run lint",
     "lint": "tslint ./src/**/*.ts",
     "format": "npm run lint -- --fix",
-    "add-to-hostfile": "sudo npx hostile set localhost localhost.api.iffr.com"
+    "add-to-hostfile": "sudo npx hostile set localhost localhost.api.iffr.com",
+    "gen": "typescript-json-schema 'src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json"
   },
   "dependencies": {
     "dotenv": "^5.0.1",
+    "jsonschema": "^1.2.4",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-combine-routers": "^3.0.0",
@@ -25,7 +27,7 @@
     "ignore": [
       "src/**/*.spec.ts"
     ],
-    "exec": "ts-node ./src/index.ts"
+    "exec": "npm run -s gen && ts-node ./src/index.ts"
   },
   "devDependencies": {
     "@types/koa": "^2.0.45",
@@ -40,6 +42,7 @@
     "tslint-config-airbnb": "^5.8.0",
     "tslint-config-prettier": "^1.10.0",
     "tslint-plugin-prettier": "^1.3.0",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.1",
+    "typescript-json-schema": "^0.23.0"
   }
 }

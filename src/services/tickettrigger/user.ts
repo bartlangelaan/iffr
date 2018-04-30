@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { getTicketTriggerPassword } from '../../utils/environment';
 import TicketTriggerUserSummary from './__API_RESPONSES__/user-summary';
+import { assure } from '../../utils/validate-schema';
 
 const basicAuthString = Buffer.from(
   `iffr:${getTicketTriggerPassword()}`,
@@ -19,7 +20,11 @@ class TicketTriggerUserService {
   }
 
   async getSummary(user: string): Promise<TicketTriggerUserSummary> {
-    return await this.fetch(`/en/bridge/user/${user}/summary.json`);
+    const summary = await this.fetch(`/en/bridge/user/${user}/summary.json`);
+
+    assure('TicketTriggerUserSummary', summary);
+
+    return summary;
   }
 }
 

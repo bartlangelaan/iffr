@@ -1,5 +1,6 @@
 .vscode
 lib
+src/utils/api-response-schemas.json
 
 # Created by https://www.gitignore.io/api/git,node,macos,linux,windows,phpstorm+all
 
