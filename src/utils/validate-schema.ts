@@ -2,9 +2,16 @@ import { Validator } from 'jsonschema';
 
 const { definitions } = require('./api-response-schemas.json');
 const validator = new Validator();
+Object.keys(definitions).forEach(definitionKey => {
+  const definitionId = `/#/definitions/${definitionKey}`;
+  definitions[definitionKey].id = definitionId;
+  validator.addSchema(definitions[definitionKey], definitionId);
+});
 
 export function validate(schema: string, thingToValidate: any) {
-  const result = validator.validate(thingToValidate, definitions[schema]);
+  const result = validator.validate(thingToValidate, {
+    $ref: definitions[schema].id,
+  });
 
   return result;
 }
