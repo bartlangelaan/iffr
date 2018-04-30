@@ -22,7 +22,7 @@ class TicketTriggerUserService {
   async getSummary(user: string): Promise<TicketTriggerUserSummary> {
     const summary = await this.fetch(`/en/bridge/user/${user}/summary.json`);
 
-    assure('TicketTriggerUserSummary', summary);
+    assure('TTUserSummary', summary);
 
     return summary;
   }
