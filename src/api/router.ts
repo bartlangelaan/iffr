@@ -1,8 +1,9 @@
 import * as Router from 'koa-router';
-import koaCombineRouters = require('koa-combine-routers');
 import status from '../providers/status';
 import authentication, { addAuthenticationState } from './oauth2';
 import user from './user';
+
+const koaCombineRouters = require('koa-combine-routers');
 
 const router = new Router();
 
