@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import user from '../services/tickettrigger/user';
+import user from '../providers/user';
 
 const router = new Router({
   prefix: '/user',
@@ -11,7 +11,9 @@ router.get('/', async ctx => {
     ctx.throw(403);
     return;
   }
-  ctx.body = await user.getSummary(userUuid);
+  ctx.body = {
+    user: await user.getUser(userUuid),
+  };
 });
 
 export default router;
