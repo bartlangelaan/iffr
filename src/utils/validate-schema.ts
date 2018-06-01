@@ -19,7 +19,9 @@ export function validate(schema: string, thingToValidate: any) {
 export function assure(schema: string, thingToValidate: any) {
   const result = validate(schema, thingToValidate);
   if (!result.valid) {
-    const errString = result.errors.map(e => e.toString()).join('\n');
+    const errString = result.errors
+      .map(e => `${e.toString()} (instance: ${e.instance})`)
+      .join('\n');
     throw new Error(
       `An instance of ${schema} is not as expected.\n\n` + errString,
     );
