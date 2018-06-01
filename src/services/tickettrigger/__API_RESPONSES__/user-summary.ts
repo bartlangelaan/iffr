@@ -1,6 +1,7 @@
 export interface TTUserContactRecord {
   Id: string;
-  Type: 'Email' | 'Home';
+  Type: 'Email' | 'Home' | 'Mobile';
+  Detail: string;
 }
 
 enum TTLanguageID {
@@ -13,16 +14,37 @@ export interface TTMultilanguageString {
   Text: string;
 }
 
+export interface TTUserRelatedClientsRecord {
+  ClientId: string;
+  ClientType: 'Customer';
+  RelationshipId: string;
+  RelationshipRoleId: string;
+  RelationshipTypeId: string;
+}
+
 export interface TTUserAddressRecord {
   Address: {
+    AddressLine1: string; // Street name (Coolsingel)
+    AddressLine2: string; // House number (1A)
     CityName: {
       GSEntry: TTMultilanguageString[];
     };
     CountryName: {
       GSEntry: TTMultilanguageString[];
     };
+    ZipCode: string | null; // Can contain spaces.
     FormattedForDisplay: string;
   };
+}
+
+export interface TTUserClientTypeRecord {
+  Id: string;
+  IsDynamic: boolean;
+  TypeId: string;
+  TypeName: {
+    GSEntry: TTMultilanguageString[];
+  };
+  TypeOrdinal: number;
 }
 
 export default interface TTUserSummary {
@@ -34,7 +56,10 @@ export default interface TTUserSummary {
       Last: string | null;
       Initials: string | null;
     };
-    Gender: 'Male';
+    Gender: 'Male' | 'Female';
+    ClientTypes: {
+      Record: TTUserClientTypeRecord[];
+    };
     IsUnconfirmed: false;
     ContactDetails: {
       Record: TTUserContactRecord[];
@@ -50,6 +75,9 @@ export default interface TTUserSummary {
       Password: null;
     };
     PreferredCultureId: string;
+    RelatedClients: {
+      Record: TTUserRelatedClientsRecord[];
+    };
     LocalId: number;
     AccessPermissions: 'All';
     CreationDateTime: string;
@@ -60,5 +88,9 @@ export default interface TTUserSummary {
     Type: 'Customer';
     IsDeceased: false;
     IsHouseholdRepresentative: true;
+  };
+  clientImage: null | {
+    ImageExtension: string;
+    ImageUrl: string;
   };
 }
