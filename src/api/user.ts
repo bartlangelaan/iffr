@@ -1,8 +1,17 @@
 import * as Router from 'koa-router';
 import user from '../providers/user';
+import ttUser from '../services/tickettrigger/user';
 
 const router = new Router({
   prefix: '/user',
+});
+
+router.get('/list', async ctx => {
+  if (!ctx.state.permissions.includes('users.view')) {
+    ctx.throw(403);
+    return;
+  }
+  ctx.body = await ttUser.query(ctx.query.query);
 });
 
 router.get('/:userId', async ctx => {

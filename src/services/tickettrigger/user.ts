@@ -28,6 +28,14 @@ class TicketTriggerUserService {
 
     return summary;
   }
+
+  async query(query: string) {
+    const results = await this.fetch(
+      `/en/bridge/find/customer/email/like/${query}`,
+    );
+
+    return results;
+  }
 }
 
 export default new TicketTriggerUserService();
