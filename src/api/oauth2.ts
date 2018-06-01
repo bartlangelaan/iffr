@@ -5,7 +5,7 @@
 import * as Router from 'koa-router';
 import { URL } from 'url';
 import login from '../services/tickettrigger/login';
-import { getClient } from '../clients';
+import { getClient, getClientBySecret, Client } from '../clients';
 import TimeClientBasedCrypto from '../utils/time-client-based-crypto';
 import { getApiTokenSalt, getApiCodeSalt } from '../utils/environment';
 
@@ -104,7 +104,7 @@ router.post('/token', async ctx => {
   const client = getClient(ctx, true);
 
   // We decrypt the code, so we get the userUuid back.
-  const userUuid = codeCrypto.decrypt(code, client);
+  const { text: userUuid } = codeCrypto.decrypt(code, client);
 
   // We encrypt the code to an access token.
   const accessToken = tokenCrypto.encrypt(userUuid, client);
@@ -117,12 +117,34 @@ router.post('/token', async ctx => {
 
 export default router;
 
+declare module 'koa-router' {
+  interface IRouterContext {
+    state: {
+      userUuid: string | null;
+      serverClient: boolean;
+      permissions: string[];
+      client: Client | null;
+    };
+  }
+}
+
 export function addAuthenticationState(
   ctx: Router.IRouterContext,
   next: () => void,
 ): void | never {
   const { authorization }: { authorization: string | undefined } = ctx.headers;
-  const { access_token }: { access_token: string | undefined } = ctx.query;
+  const {
+    access_token,
+    client_secret,
+  }: {
+    access_token: string | undefined;
+    client_secret: string | undefined;
+  } = ctx.query;
+
+  ctx.state.client = null;
+  ctx.state.userUuid = null;
+  ctx.state.serverClient = false;
+  ctx.state.permissions = [];
 
   let token: string | null = null;
 
@@ -141,10 +163,26 @@ export function addAuthenticationState(
 
   if (token) {
     try {
-      ctx.state.userUuid = tokenCrypto.decrypt(token);
+      const decrypted = tokenCrypto.decrypt(token);
+      ctx.state.client = decrypted.client;
+      ctx.state.userUuid = decrypted.text;
+      ctx.state.serverClient = false;
+      ctx.state.permissions.push(
+        ...(decrypted.client.permissions.unsecure || []),
+      );
     } catch (error) {
       return ctx.throw(403, error.message);
     }
+  }
+
+  if (client_secret) {
+    const client = getClientBySecret(client_secret);
+    if (!client) {
+      return ctx.throw(403, 'Client with secret not found.');
+    }
+    ctx.state.serverClient = true;
+    ctx.state.client = client;
+    ctx.state.permissions.push(...(client.permissions.secure || []));
   }
 
   return next();

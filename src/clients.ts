@@ -19,6 +19,11 @@ export interface Client {
   // because we need to be able to decrypt our tokens, and check if this token
   // was issued by this client.
   salt: string;
+
+  permissions: {
+    unsecure?: string[];
+    secure?: string[];
+  };
 }
 
 const CLIENTS: Client[] = [
@@ -26,6 +31,11 @@ const CLIENTS: Client[] = [
     id: 'website',
     redirect_uri: 'https://iffr.com/auth_callback',
     salt: getApiClientSalt('WEBSITE'),
+    secret: 'abc123',
+    permissions: {
+      unsecure: ['user.view'],
+      secure: ['users.view'],
+    },
   },
 ];
 
@@ -62,4 +72,12 @@ export function getClient(ctx: IRouterContext, secretEnforced = false) {
   }
 
   return client;
+}
+
+export function getClientBySecret(secret: string) {
+  return CLIENTS.find(c => c.secret === secret);
+}
+
+export function getClientBySalt(salt: string) {
+  return CLIENTS.find(c => c.salt === salt);
 }

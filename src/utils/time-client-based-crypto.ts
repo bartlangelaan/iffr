@@ -1,5 +1,5 @@
 import { CustomError } from 'ts-custom-error';
-import { Client } from '../clients';
+import { Client, getClientBySalt } from '../clients';
 
 import EasyCrypto from './easy-crypto';
 
@@ -17,7 +17,7 @@ export default class TimeClientBasedCrypto {
   }
   encrypt(text: string, client: Client) {
     return this.crypto.encrypt(
-      [client.salt, new Date().getTime().toString(), text].join(':'),
+      [client.id, new Date().getTime().toString(), text].join(':'),
     );
   }
   decrypt(encodedText: string, client?: Client) {
@@ -28,11 +28,19 @@ export default class TimeClientBasedCrypto {
       throw new ClientInvalidError();
     }
 
+    const clientUsed = client || getClientBySalt(salt);
+    if (!clientUsed) {
+      throw new ClientInvalidError();
+    }
+
     if (parseInt(time, 10) + this.expirationTime < new Date().getTime()) {
       throw new TokenExpiredError();
     }
 
-    return text;
+    return {
+      text,
+      client: clientUsed,
+    };
   }
 }
 
