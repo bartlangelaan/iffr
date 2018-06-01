@@ -13,7 +13,7 @@ class TicketTriggerUserService {
       headers: {
         Authorization: `Basic ${basicAuthString}`,
       },
-      timeout: 1000,
+      timeout: 5000,
     });
 
     return f.json();
@@ -21,6 +21,8 @@ class TicketTriggerUserService {
 
   async getSummary(user: string): Promise<TicketTriggerUserSummary> {
     const summary = await this.fetch(`/en/bridge/user/${user}/summary.json`);
+
+    if (summary.client === null) throw new Error('User not found.');
 
     assure('TTUserSummary', summary);
 
