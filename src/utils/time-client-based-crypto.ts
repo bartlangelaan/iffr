@@ -17,7 +17,7 @@ export default class TimeClientBasedCrypto {
   }
   encrypt(text: string, client: Client) {
     return this.crypto.encrypt(
-      [client.id, new Date().getTime().toString(), text].join(':'),
+      [client.salt, new Date().getTime().toString(), text].join(':'),
     );
   }
   decrypt(encodedText: string, client?: Client) {
