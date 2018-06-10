@@ -86,6 +86,7 @@ export default interface TTUserSummary {
       Status: 'Active';
     };
     Type: 'Customer';
+    Birthday?: string;
     IsDeceased: false;
     IsHouseholdRepresentative: true;
   };
