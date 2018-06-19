@@ -9,6 +9,9 @@ Object.keys(definitions).forEach(definitionKey => {
 });
 
 export function validate(schema: string, thingToValidate: any) {
+  if (!definitions[schema]) {
+    throw new Error(`The ${schema} TypeScript type was not found.`);
+  }
   const result = validator.validate(thingToValidate, {
     $ref: definitions[schema].id,
   });
