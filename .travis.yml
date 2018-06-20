@@ -4,4 +4,4 @@ node_js:
 
 install: cd projects/api && npm install
 
-script: cd projects/api && npm test
+script: npm test
