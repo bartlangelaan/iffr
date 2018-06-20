@@ -14,9 +14,10 @@
     "dotenv": "^5.0.1",
     "jsonschema": "^1.2.4",
     "koa": "^2.5.0",
-    "koa-bodyparser": "^4.2.0",
+    "koa-bodyparser": "^4.2.1",
     "koa-combine-routers": "^3.0.0",
     "node-fetch": "^2.1.2",
+    "qs": "^6.5.2",
     "ts-custom-error": "^2.2.1"
   },
   "nodemonConfig": {
@@ -35,6 +36,7 @@
     "@types/koa-router": "^7.0.27",
     "@types/node": "^10.3.1",
     "@types/node-fetch": "^1.6.8",
+    "@types/qs": "^6.5.1",
     "koa-router": "^7.4.0",
     "nodemon": "^1.17.3",
     "prettier": "^1.12.1",

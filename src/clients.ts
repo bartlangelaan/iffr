@@ -33,7 +33,7 @@ const CLIENTS: Client[] = [
     salt: getApiClientSalt('WEBSITE'),
     secret: 'abc123',
     permissions: {
-      unsecure: ['user.view'],
+      unsecure: ['user.view', 'user.favorites.view', 'user.favorites.edit'],
       secure: ['users.view'],
     },
   },
