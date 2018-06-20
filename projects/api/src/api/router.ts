@@ -7,8 +7,8 @@ const koaCombineRouters = require('koa-combine-routers');
 
 const router = new Router();
 
-router.post('/', ctx => {
-  ctx.body = ctx.request.body;
+router.get('/', ctx => {
+  ctx.body = status();
 });
 
 export default [
