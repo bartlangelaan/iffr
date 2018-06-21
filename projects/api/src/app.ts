@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { StatusController } from './api/router';
-import { OAuth2Controller } from './api/oauth2';
-import { UsersController } from './api/user';
+import { StatusController } from './controllers/status.controller';
+import { OAuth2Controller } from './controllers/oauth2.controller';
+import { UsersController } from './controllers/users.controller';
 import { APP_GUARD } from '@nestjs/core';
-import { ApplicationGuard } from './auth';
+import { ApplicationGuard } from './app.guard';
 
 @Module({
   imports: [],

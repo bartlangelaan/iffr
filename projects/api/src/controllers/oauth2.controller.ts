@@ -3,7 +3,7 @@
  * comes along.
  */
 import login from '../services/tickettrigger/login';
-import { tokenCrypto } from '../auth';
+import { tokenCrypto } from '../app.guard';
 import { getClient } from '../clients';
 import TimeClientBasedCrypto from '../utils/time-client-based-crypto';
 import { getApiCodeSalt } from '../utils/environment';

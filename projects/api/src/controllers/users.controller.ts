@@ -11,7 +11,7 @@ import {
 import userProvider from '../providers/user';
 import favorites from '../providers/favorites';
 import ttUser from '../services/tickettrigger/user';
-import { RequirePermissions, User } from '../auth';
+import { RequirePermissions, User } from '../app.guard';
 
 @Controller('users')
 export class UsersController {
