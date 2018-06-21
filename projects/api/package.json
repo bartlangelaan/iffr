@@ -11,13 +11,14 @@
     "gen": "typescript-json-schema 'src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json"
   },
   "dependencies": {
+    "@nestjs/common": "^5.0.1",
+    "@nestjs/core": "^5.0.1",
     "dotenv": "^5.0.1",
     "jsonschema": "^1.2.4",
-    "koa": "^2.5.0",
-    "koa-bodyparser": "^4.2.1",
-    "koa-combine-routers": "^3.0.0",
     "node-fetch": "^2.1.2",
     "qs": "^6.5.2",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^6.2.1",
     "ts-custom-error": "^2.2.1"
   },
   "nodemonConfig": {
@@ -31,13 +32,7 @@
     "exec": "npm run -s gen && ts-node ./src/index.ts"
   },
   "devDependencies": {
-    "@types/koa": "^2.0.45",
-    "@types/koa-bodyparser": "^4.2.0",
-    "@types/koa-router": "^7.0.27",
-    "@types/node": "^10.3.1",
-    "@types/node-fetch": "^1.6.8",
     "@types/qs": "^6.5.1",
-    "koa-router": "^7.4.0",
     "nodemon": "^1.17.3",
     "prettier": "^1.12.1",
     "ts-node": "^6.0.0",

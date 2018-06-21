@@ -1,5 +1,6 @@
 import { IRouterContext } from 'koa-router';
 import { getApiClientSalt } from './utils/environment';
+import { BadRequestException } from '@nestjs/common';
 
 export interface Client {
   // The id is a public identifier for this client.
@@ -45,10 +46,10 @@ const CLIENTS: Client[] = [
  *
  * Fails the request if the client can't be found.
  */
-export function getClient(ctx: IRouterContext, secretEnforced = false) {
-  const { body } = ctx.request;
+export function getClient(req: any, secretEnforced = false) {
+  const { body } = req;
   const query =
-    typeof body === 'object' && Object.keys(body).length ? body : ctx.query;
+    typeof body === 'object' && Object.keys(body).length ? body : req.query;
   const { client_id, client_secret } = query;
 
   // Find the client based on the client_id parameter.
@@ -56,19 +57,19 @@ export function getClient(ctx: IRouterContext, secretEnforced = false) {
 
   // If there is no client_id, throw.
   if (!client) {
-    throw ctx.throw(400, 'client_id not found');
+    throw new BadRequestException('Client id is required.');
   }
 
   // If the secret is enforced and the client has a secret but it's not
   // sent, don't allow.
   if (secretEnforced && client.secret && !client_secret) {
-    throw ctx.throw(400, 'client_secret is required for this client');
+    throw new BadRequestException('Client secret is required.');
   }
 
   // If there is a client_secret, we verify that it's true (even when it's
   // not required).
   if (client_secret && client_secret !== client.secret) {
-    throw ctx.throw(400, 'client_secret not correct');
+    throw new BadRequestException('Client secret invalid.');
   }
 
   return client;

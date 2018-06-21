@@ -1,8 +1,15 @@
-import app from './app';
-import router from './api/router';
+import { NestFactory } from '@nestjs/core';
+import App from './app';
 
-router.forEach(middleware => app.use(middleware));
+declare const module: any;
 
-app.listen(3000, () => {
-  console.debug('Whoop, server is running!');
-});
+async function bootstrap() {
+  const app = await NestFactory.create(App);
+  await app.listen(3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+}
+bootstrap();
