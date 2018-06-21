@@ -1,4 +1,3 @@
-import { IRouterContext } from 'koa-router';
 import { getApiClientSalt } from './utils/environment';
 import { BadRequestException } from '@nestjs/common';
 

@@ -2,8 +2,6 @@
  * We fake the complete oauth flow. We do this until a real oauth provider
  * comes along.
  */
-import * as Router from 'koa-router';
-import { URL } from 'url';
 import login from '../services/tickettrigger/login';
 import { tokenCrypto } from '../auth';
 import { getClient } from '../clients';
