@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.3.4",
+    "@types/node-fetch": "^2.1.1",
     "@types/qs": "^6.5.1",
     "nodemon": "^1.17.5",
     "prettier": "^1.12.1",
