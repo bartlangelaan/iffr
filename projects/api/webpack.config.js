@@ -30,6 +30,7 @@ module.exports = {
     new StartServerPlugin({
         name: 'server.js',
         nodeArgs: ['--inspect'],
+        keyboard: true,
       }),
   ],
   output: {
