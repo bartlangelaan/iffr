@@ -13,6 +13,7 @@
   "dependencies": {
     "@nestjs/common": "^5.0.1",
     "@nestjs/core": "^5.0.1",
+    "@nestjs/swagger": "^2.0.2",
     "dotenv": "^5.0.1",
     "jsonschema": "^1.2.4",
     "node-fetch": "^2.1.2",

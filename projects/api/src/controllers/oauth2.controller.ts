@@ -18,10 +18,12 @@ import {
   Header,
   Post,
 } from '@nestjs/common';
+import { ApiUseTags } from '@nestjs/swagger';
 
 const codeCrypto = new TimeClientBasedCrypto(60, getApiCodeSalt());
 
 @Controller('oauth2')
+@ApiUseTags('oauth2')
 export class OAuth2Controller {
   /**
    * Users are redirected to this endpoint when they need to be authenticated.
