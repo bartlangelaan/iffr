@@ -33,3 +33,7 @@ export function getApiCodeSalt() {
 export function getTicketTriggerPassword() {
   return env['TICKET_TRIGGER_PASS'];
 }
+
+export function getFionaPublicationApiKey() {
+  return env['FIONA_PUBLICATION_API_KEY'];
+}
