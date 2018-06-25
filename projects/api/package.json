@@ -20,6 +20,7 @@
     "qs": "^6.5.2",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
+    "sanitize-html": "^1.18.2",
     "ts-custom-error": "^2.2.1"
   },
   "nodemonConfig": {
@@ -36,6 +37,7 @@
     "@types/node": "^10.3.4",
     "@types/node-fetch": "^2.1.1",
     "@types/qs": "^6.5.1",
+    "@types/sanitize-html": "^1.14.0",
     "nodemon": "^1.17.5",
     "prettier": "^1.12.1",
     "start-server-webpack-plugin": "^2.2.5",
