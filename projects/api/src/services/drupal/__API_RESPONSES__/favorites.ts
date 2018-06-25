@@ -34,3 +34,11 @@ export interface DrupalFavoritesAddError {
 export type DrupalFavoritesAdd =
   | DrupalFavoritesAddSuccessful
   | DrupalFavoritesAddError;
+
+export interface DrupalFavoritesFionaMappingItem {
+  id: string;
+  type: string;
+  fiona: string;
+}
+
+export type DrupalFavoritesFionaMapping = DrupalFavoritesFionaMappingItem[];

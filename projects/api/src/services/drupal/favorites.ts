@@ -4,12 +4,13 @@ import {
   DrupalFavoritesList,
   DrupalFavoritesAdd,
   favoriteId,
+  DrupalFavoritesFionaMapping,
 } from './__API_RESPONSES__/favorites';
 import { assure } from '../../utils/validate-schema';
 
 type DrupalNodeId = string;
 
-interface Favorite {
+export interface Favorite {
   type: string;
   nodeId: DrupalNodeId;
   id: favoriteId;
@@ -92,6 +93,43 @@ class DrupalFavorites {
         }`,
       );
     }
+  }
+
+  private mapping: Promise<DrupalFavoritesFionaMapping> | null = null;
+
+  private async getMapping(
+    types?: string[],
+  ): Promise<DrupalFavoritesFionaMapping> {
+    // Cheap cache.. save the promise in this.mapping if it was requested once.
+    if (this.mapping) return this.mapping;
+
+    // Request list in Drupal, and set the promise immideately. If the function is called
+    // twice and the fetch isn't ready in between, both will use the same promise. This
+    // way the endpoint won't be called twice at the same time.
+    this.mapping = (async (): Promise<DrupalFavoritesFionaMapping> => {
+      const res = await this.fetch('/fiona_ids');
+      assure('DrupalFavoritesFionaMapping', res);
+      return res;
+    })();
+
+    // Wait for the promise to resolve. If it failes, set this.mapping to null so new
+    // requests will try to fetch again.
+    try {
+      return await this.mapping;
+    } catch (e) {
+      this.mapping = null;
+      throw e;
+    }
+  }
+
+  async getFionaIdFromDrupalId(drupalId: string, typings?: string[]) {
+    const mapping = await this.getMapping();
+    return mapping.find(i => i.id === drupalId);
+  }
+
+  async getDrupalIdFromFionaId(fionaId: string, typings?: string[]) {
+    const mapping = await this.getMapping();
+    return mapping.find(i => i.fiona === fionaId);
   }
 }
 
