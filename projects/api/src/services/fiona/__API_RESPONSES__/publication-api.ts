@@ -55,12 +55,7 @@ export interface FionaPublicationApiAZFilmsListItem {
   } | null;
   lengthInMinutes: number;
   sortedTitle: string;
-  texts: [
-    {
-      id: string;
-      html: FionaPublicationAPITextsHTML[];
-    }
-  ];
+  texts: [FionaPublicationAPIDescription];
   useOriginalTitle: boolean;
   video: null | {
     title: string;
@@ -81,7 +76,7 @@ interface FionaPublicationApiIdName {
 
 export type FionaPublicationApiAZFilmsList = FionaPublicationApiAZFilmsListItem[];
 
-interface FionaPublicationAPITranslatableOption {
+export interface FionaPublicationAPITranslatableOption {
   key: string;
   translations: [
     {
@@ -123,8 +118,15 @@ export interface FionaPublicationApiFilm {
   }[];
   sortedTitle: string;
   spokenLanguages: FionaPublicationAPITranslatableOption[];
+  texts: FionaPublicationAPIDescription[];
   useOriginalTitle: boolean;
   yearOfProduction: number;
+}
+
+export interface FionaPublicationAPIDescription {
+  id: string;
+  html: FionaPublicationAPITextsHTML[];
+  type: FionaPublicationAPITranslatableOption;
 }
 
 export interface FionaPublicationApiShow {
@@ -138,7 +140,7 @@ export interface FionaPublicationApiShow {
   lengthInMinuties: number;
   location: {
     id: string;
-    abbreviation: string;
+    abbreviation: null | string;
     description: string;
   };
   noSale: boolean;
@@ -147,32 +149,32 @@ export interface FionaPublicationApiShow {
     id: string;
     description: string;
   };
-  section: {
+  section: null | {
     id: string;
     description: string;
   };
-  showParts: [
-    {
-      id: string;
-      film: {
-        id: FilmId;
-        description: string;
-      } | null;
-      lengthInMinutes: number;
-      subtitleLanguages: any[];
-      title: string;
-    }
-  ];
+  showParts: {
+    id: string;
+    film: {
+      id: FilmId;
+      description: string;
+    } | null;
+    lengthInMinutes: number;
+    subtitleLanguages: any[];
+    title: string;
+  }[];
   sortedTitle: string;
-  sourceComposition: {
+  sourceComposition: null | {
     id: string;
     description: string;
   };
   startOn: string;
-  ticketSaleId: string;
+  ticketSaleId: null | string;
   type: FionaPublicationAPITranslatableOption;
   edition: {
     id: EditionId;
     description: string;
   };
 }
+
+export type FionaPublicationApiShowResponse = null | FionaPublicationApiShow;
