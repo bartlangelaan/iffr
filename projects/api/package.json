@@ -17,6 +17,7 @@
     "dotenv": "^5.0.1",
     "jsonschema": "^1.2.4",
     "node-fetch": "^2.1.2",
+    "promise-queue": "^2.2.5",
     "qs": "^6.5.2",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@types/node": "^10.3.4",
     "@types/node-fetch": "^2.1.1",
+    "@types/promise-queue": "^2.2.0",
     "@types/qs": "^6.5.1",
     "@types/sanitize-html": "^1.14.0",
     "nodemon": "^1.17.5",

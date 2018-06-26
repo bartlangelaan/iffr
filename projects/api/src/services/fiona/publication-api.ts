@@ -19,6 +19,7 @@ import {
 } from './__API_RESPONSES__/publication-api';
 import { assure } from '../../utils/validate-schema';
 import { getFionaPublicationApiKey } from '../../utils/environment';
+import * as Queue from 'promise-queue';
 
 @Injectable()
 export class FionaPublicationApi {
@@ -31,6 +32,8 @@ export class FionaPublicationApi {
     shows: {},
   };
 
+  private queue = new Queue(10);
+
   private async fetch(method: string, schema?: string) {
     const apikey = getFionaPublicationApiKey();
     if (!apikey) {
@@ -38,12 +41,14 @@ export class FionaPublicationApi {
         "Coundn't connect to the Fiona Publication API because the API key is missing.",
       );
     }
-    const res = await fetch('https://iffr-a-api.fiona-online.net/v1' + method, {
-      headers: {
-        apikey,
-      },
-      agent: new Agent({ rejectUnauthorized: false }),
-    });
+    const res = await this.queue.add(() =>
+      fetch('https://iffr-a-api.fiona-online.net/v1' + method, {
+        headers: {
+          apikey,
+        },
+        agent: new Agent({ rejectUnauthorized: false }),
+      }),
+    );
     const json = await res.json();
     if (schema) {
       assure(schema, json);
