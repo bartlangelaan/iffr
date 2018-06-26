@@ -85,7 +85,7 @@ interface FionaPublicationAPITranslatableOption {
   key: string;
   translations: [
     {
-      abbreviation: string;
+      abbreviation: string | null;
       language: 'nl' | 'en';
       text: string;
     }
@@ -97,38 +97,32 @@ export interface FionaPublicationApiFilm {
   category: FionaPublicationAPITranslatableOption;
   colour: FionaPublicationAPITranslatableOption;
   completed: boolean;
-  compositions: [
-    {
+  compositions: {
+    id: string;
+    fullTitle: string;
+    section: null | {
       id: string;
-      fullTitle: string;
-      section: {
-        id: string;
-        description: string;
-      };
-      type: FionaPublicationAPITranslatableOption;
-    }
-  ];
+      description: string;
+    };
+    type: FionaPublicationAPITranslatableOption;
+  }[];
   fullOriginalTitle: string;
   fullPreferredTitle: string;
   genre: FionaPublicationAPITranslatableOption;
   lengthInMinutes: number;
   originalTitle: string;
   premiere: FionaPublicationAPITranslatableOption;
-  sections: [
-    {
-      id: string;
-      name: string;
-      section: FionaPublicationAPITranslatableOption;
-    }
-  ];
-  shows: [
-    {
-      id: ShowId;
-      description: string;
-    }
-  ];
+  sections: {
+    id: string;
+    name: string;
+    section: FionaPublicationAPITranslatableOption;
+  }[];
+  shows: {
+    id: ShowId;
+    description: string;
+  }[];
   sortedTitle: string;
-  spokenLanguages: [FionaPublicationAPITranslatableOption];
+  spokenLanguages: FionaPublicationAPITranslatableOption[];
   useOriginalTitle: boolean;
   yearOfProduction: number;
 }
