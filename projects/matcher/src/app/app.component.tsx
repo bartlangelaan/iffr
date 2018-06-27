@@ -4,7 +4,6 @@ import store from './app.store';
 
 @observer
 export default class App extends React.Component {
-
   render() {
     return `Currently on page ${store.screen}.`;
   }

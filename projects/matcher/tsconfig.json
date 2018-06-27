@@ -6,6 +6,6 @@
     "noImplicitReturns": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "jsx": "react",
+    "jsx": "react"
   }
 }
