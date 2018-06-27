@@ -1,4 +1,4 @@
-import { observable, configure } from 'mobx';
+import { observable, configure, action, autorun, decorate } from 'mobx';
 
 configure({
   enforceActions: true,
@@ -13,12 +13,21 @@ export enum Screen {
   Planning,
 }
 
+export enum Language {
+  NL = 'nl',
+  EN = 'en',
+}
+
 class AppStore {
   @observable screen: Screen = Screen.Guide1;
 
+  @action.bound
   setScreen(screen: Screen) {
     this.screen = screen;
   }
-}
 
-export default new AppStore();
+  @observable language: Language = Language.NL;
+}
+const store = new AppStore();
+
+export default store;
