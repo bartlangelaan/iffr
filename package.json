@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "tslint ./projects/**/src/**/*.{js,ts,tsx}"
+    "test": "tslint ./projects/*/src/**/*.{js,ts,tsx}"
   },
   "devDependencies": {
     "prettier": "^1.13.6",
