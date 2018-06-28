@@ -34,7 +34,6 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.BUILD_TIME': JSON.stringify(new Date().toLocaleString('nl-NL', {timeZone: 'Europe/Amsterdam'})),
-      'process.env.BUILD_ID': JSON.stringify((process.env.TRAVIS_COMMIT || 'local').substr(0, 7)),
     }),
   ]
 };

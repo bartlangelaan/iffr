@@ -13,8 +13,10 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('IFFR API')
-      .setDescription('All API methods needed to get data from the IFFR')
-      .setVersion(`build ${process.env.BUILD_ID} - ${process.env.BUILD_TIME}`)
+      .setDescription(
+        "With these JSON endpoints it's possible to get various data from the International Film Festival Rotterdam.",
+      )
+      .setVersion(`last release: ${process.env.BUILD_TIME}`)
       .setSchemes('https')
       .setHost('test.api.iffr.com')
       .addBearerAuth('client_secret', 'query')
