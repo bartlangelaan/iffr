@@ -8,6 +8,8 @@ async function bootstrap() {
   // Create the Nestjs application.
   const app = await NestFactory.create(App);
 
+  app.set('trust proxy', true);
+
   // Create a documentation definition.
   const document = SwaggerModule.createDocument(
     app,
@@ -29,8 +31,13 @@ async function bootstrap() {
 
   // Redirect / to /docs
   app.use((req: any, res: any, next: any) => {
-    if (req.url === '/') res.redirect('/docs');
-    else next();
+    if (req.hostname === 'iffr-api.herokuapp.com') {
+      res.redirect('https://test.api.iffr.com' + req.url);
+    } else if (!req.secure && req.hostname === 'test.api.iffr.com') {
+      res.redirect('https://' + req.hostname + req.url);
+    } else if (req.url === '/') {
+      res.redirect('/docs');
+    } else next();
   });
 
   // Bind to the specified port, or to port 3000 if unspcified.
