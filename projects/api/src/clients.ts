@@ -37,6 +37,14 @@ const CLIENTS: Client[] = [
       secure: ['users.view'],
     },
   },
+  {
+    id: 'matcher',
+    redirect_uri: 'https://bartlangelaan.github.io/iffr',
+    salt: getApiClientSalt('MATCHER'),
+    permissions: {
+      unsecure: ['user.view', 'user.favorites.view', 'user.favorites.edit'],
+    },
+  },
 ];
 
 /**
