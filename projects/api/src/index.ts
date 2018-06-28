@@ -8,6 +8,8 @@ async function bootstrap() {
   // Create the Nestjs application.
   const app = await NestFactory.create(App);
 
+  app.enableCors();
+
   app.set('trust proxy', true);
 
   // Create a documentation definition.
