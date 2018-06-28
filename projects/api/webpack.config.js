@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require("start-server-webpack-plugin");
-const git = require('git-rev-sync');
 
 const config = {
   entry: ['./src/index.ts'],
@@ -34,8 +33,8 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_TIME': JSON.stringify(git.date().toLocaleString('nl-NL', {timeZone: 'Europe/Amsterdam'})),
-      'process.env.BUILD_ID': JSON.stringify(git.short()),
+      'process.env.BUILD_TIME': JSON.stringify(new Date().toLocaleString('nl-NL', {timeZone: 'Europe/Amsterdam'})),
+      'process.env.BUILD_ID': JSON.stringify((process.env.TRAVIS_COMMIT || 'local').substr(0, 7)),
     }),
   ]
 };
