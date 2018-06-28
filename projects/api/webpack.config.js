@@ -3,9 +3,8 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require("start-server-webpack-plugin");
 
-module.exports = {
-  entry: ['webpack/hot/poll?1000', './src/index.ts'],
-  watch: true,
+const config = {
+  entry: ['./src/index.ts'],
   target: 'node',
   externals: [
     nodeExternals({
@@ -21,20 +20,31 @@ module.exports = {
       },
     ],
   },
-  mode: "development",
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new StartServerPlugin({
-        name: 'server.js',
-        nodeArgs: ['--inspect'],
-        keyboard: true,
-      }),
-  ],
   output: {
     path: path.join(__dirname, 'lib'),
     filename: 'server.js',
   },
 };
+
+module.exports = (env, {mode}) => {
+  
+  if(mode === 'development') {
+    config.watch = true;
+    config.entry.unshift('webpack/hot/poll?1000');
+    config.plugins = [
+      new webpack.HotModuleReplacementPlugin(),
+      new StartServerPlugin({
+          name: 'server.js',
+          nodeArgs: ['--inspect'],
+          keyboard: true,
+        }),
+    ];
+  }
+  else {
+  }
+
+  return config;
+}

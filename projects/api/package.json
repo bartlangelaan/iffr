@@ -3,9 +3,10 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "webpack",
+    "start": "webpack --mode=development",
     "add-to-hostfile": "sudo npx hostile set localhost localhost.api.iffr.com",
-    "gen": "typescript-json-schema 'src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json"
+    "gen": "typescript-json-schema 'src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json",
+    "heroku-postbuild": "webpack --mode=production"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.1",

@@ -13,7 +13,6 @@ before_deploy: cd projects/api
 
 deploy:
   provider: heroku
-  skip_cleanup: true
   api_key: $HEROKU_API_KEY
   app: iffr-api
   on: master
