@@ -5,8 +5,10 @@ import App from './app';
 declare const module: any;
 
 async function bootstrap() {
+  // Create the Nestjs application.
   const app = await NestFactory.create(App);
 
+  // Create a documentation definition.
   const document = SwaggerModule.createDocument(
     app,
     new DocumentBuilder()
@@ -18,10 +20,19 @@ async function bootstrap() {
       .build(),
   );
 
-  SwaggerModule.setup('/', app, document);
+  // Mount the documentation on /docs.
+  SwaggerModule.setup('/docs', app, document);
 
+  // Redirect / to /docs
+  app.use((req: any, res: any, next: any) => {
+    if (req.url === '/') res.redirect('/docs');
+    else next();
+  });
+
+  // Bind to the specified port, or to port 3000 if unspcified.
   await app.listen(process.env.PORT || 3000);
 
+  // Hot reloading, so developing is faster. Is ignored in production.
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
