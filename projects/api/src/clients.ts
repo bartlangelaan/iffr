@@ -1,4 +1,4 @@
-import { getApiClientSalt } from './utils/environment';
+import { getApiClientSalt, getApiClientSecret } from './utils/environment';
 import { BadRequestException } from '@nestjs/common';
 
 export interface Client {
@@ -31,7 +31,7 @@ const CLIENTS: Client[] = [
     id: 'website',
     redirect_uri: 'https://iffr.com/auth_callback',
     salt: getApiClientSalt('WEBSITE'),
-    secret: 'abc123',
+    secret: getApiClientSecret('WEBSITE'),
     permissions: {
       unsecure: ['user.view', 'user.favorites.view', 'user.favorites.edit'],
       secure: ['users.view'],

@@ -22,6 +22,10 @@ export function getApiClientSalt(clientId: string) {
   return getOrGenerate(`API_SALT_CLIENT_${clientId}`, generateRandom);
 }
 
+export function getApiClientSecret(clientId: string) {
+  return getOrGenerate(`API_CLIENT_SECRET_${clientId}`, generateRandom);
+}
+
 export function getApiTokenSalt() {
   return getOrGenerate('API_SALT_TOKEN', generateRandom);
 }
