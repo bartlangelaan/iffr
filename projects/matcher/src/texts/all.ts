@@ -8,6 +8,12 @@ class Texts {
     nl:
       'Welkom bij onze volautomatische FilmMatcher! Wij helpen je een keuze te maken in het gigantische filmprogramma van 2018.',
   };
+  'explanation1.heading' = 'Suggesties';
+  'explanation1.text' =
+    'Door films te beoordelen leren wij je smaak, en kunnen wij persoonlijke filmsuggesties doen.';
+  'explanation2.heading' = 'Persoonlijk';
+  'explanation2.text' =
+    'Dit werkt het beste als je bent ingelogd. Je hoeft niet in te loggen, maar dan worden je suggesties niet opgeslagen.';
 }
 
 const texts = new Texts();

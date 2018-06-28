@@ -8,6 +8,7 @@ configure({
 export enum Screen {
   Guide1,
   Guide2,
+  Guide3,
   Login,
   Matching,
   Planning,
