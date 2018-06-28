@@ -6,6 +6,10 @@ const StartServerPlugin = require("start-server-webpack-plugin");
 const config = {
   entry: ['./src/index.ts'],
   target: 'node',
+  node: {
+    __dirname: false,
+    __filename: false,
+  },
   externals: [
     nodeExternals({
       whitelist: ['webpack/hot/poll?1000'],

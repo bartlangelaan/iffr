@@ -9,7 +9,7 @@ function getOrGenerate(key: string, generate: () => string) {
   if (typeof entry !== 'undefined') return entry;
 
   const generated = generate();
-  appendFileSync(__dirname + '/../../.env', key + '=' + generated + '\n');
+  appendFileSync(__dirname + '/../.env', key + '=' + generated + '\n');
   console.warn('Set', key, 'to', generated, 'and saved it to the .env file.');
   return generated;
 }
