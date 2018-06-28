@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require("start-server-webpack-plugin");
+const git = require('git-rev-sync');
 
 const config = {
   entry: ['./src/index.ts'],
@@ -31,6 +32,12 @@ const config = {
     path: path.join(__dirname, 'lib'),
     filename: 'server.js',
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.BUILD_TIME': JSON.stringify(git.date().toLocaleString('nl-NL', {timeZone: 'Europe/Amsterdam'})),
+      'process.env.BUILD_ID': JSON.stringify(git.short()),
+    }),
+  ]
 };
 
 module.exports = (env, {mode}) => {
@@ -38,14 +45,14 @@ module.exports = (env, {mode}) => {
   if(mode === 'development') {
     config.watch = true;
     config.entry.unshift('webpack/hot/poll?1000');
-    config.plugins = [
+    config.plugins.push(...[
       new webpack.HotModuleReplacementPlugin(),
       new StartServerPlugin({
           name: 'server.js',
           nodeArgs: ['--inspect'],
           keyboard: true,
         }),
-    ];
+    ]);
   }
   else {
   }

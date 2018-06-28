@@ -14,7 +14,9 @@ async function bootstrap() {
     new DocumentBuilder()
       .setTitle('IFFR API')
       .setDescription('All API methods needed to get data from the IFFR')
-      .setVersion('1.0')
+      .setVersion(`build ${process.env.BUILD_ID} - ${process.env.BUILD_TIME}`)
+      .setSchemes('https')
+      .setHost('api.iffr.com')
       .addBearerAuth('client_secret', 'query')
       .addOAuth2('accessCode', '/oauth2/auth', '/oauth2/token')
       .build(),
