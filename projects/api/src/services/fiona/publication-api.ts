@@ -19,6 +19,8 @@ import {
 } from './__API_RESPONSES__/publication-api';
 import { assure } from '../../utils/validate-schema';
 import { getFionaPublicationApiKey } from '../../utils/environment';
+
+/// <reference path="../../../types/promise-queue.d.ts" />
 import * as Queue from 'promise-queue';
 
 @Injectable()

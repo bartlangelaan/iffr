@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack --mode=development",
     "add-to-hostfile": "sudo npx hostile set localhost localhost.api.iffr.com",
-    "gen": "typescript-json-schema 'src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json",
+    "gen": "typescript-json-schema './src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json",
     "heroku-postbuild": "npm run gen && webpack --mode=production"
   },
   "dependencies": {
@@ -35,7 +35,6 @@
   "devDependencies": {
     "@types/node": "^10.3.4",
     "@types/node-fetch": "^2.1.1",
-    "@types/promise-queue": "^2.2.0",
     "@types/qs": "^6.5.1",
     "@types/sanitize-html": "^1.14.0",
     "nodemon": "^1.17.5",
