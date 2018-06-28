@@ -8,3 +8,13 @@ install:
 
 script: 
   - npm test
+
+before_deploy: cd projects/api
+
+deploy:
+  provider: heroku
+  skip_cleanup: true
+  api_key:
+    secure: IMeHyTSI9wWSNs+43Vw0Nd5ZGuU8+04R9OxXrA1Da4oCmBELS63EjdsWCDwgceNzJbEpUdS4NkQTrS51RjGylz2kwRZrSfb7lOSjXDuuKuIVrH8kI6b9pQXyRHsVa6WMpIWUrIZDT0AYQmGdy2bD+fciSGLn8iJbTuuoUEevQ3mttxTOeZoXgBwlSMfUhdvZ4Q7P6ymPPJM3O1tfQ3FSIfWIReRWy8Fd7XaTdWk604RQkh43FlALkW5cIf1cJa7hJkeQgTviq5RkVKpaA86Eiu4NuPlKRsazrPhIw8+m66MX2QA8M1nutUFF+P+DDbHPsrrhPXWmMW2muvSgdsjitkPcJZFM+9RZcIKaE33KlvpQsTFw1enXx9PssqnlP2JpIgJaqLWdLCYSEmI/nWzCX0KyZFYp3/PGVn7Y1OoEYuFqIm1emfj8Qm81vMprDehN9SGIO+WLAAJigmA4XnqL4LSy/eij+VzT7vXEJ6zTbXqwTaAZtokUtMtJXza8rktrfwoisPTxbxpc3oX6WJKSUSFAAsknxPzBys9FJaOvT1OFtrdTD8YhpdZdzAVeM1nkcsofeh+buQQTG12OX0StkiFoIxHZJbz0CWwujFBnkEieY6SWswI8SeRRpK69696fuAKuGe2hoLCcHa83U++OeJD1kWmyZgmGKkApWSiU7Vo=
+  app: iffr-api
+  on: master
