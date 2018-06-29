@@ -14,6 +14,9 @@ class Texts {
   'explanation2.heading' = 'Persoonlijk';
   'explanation2.text' =
     'Dit werkt het beste als je bent ingelogd. Je hoeft niet in te loggen, maar dan worden je suggesties niet opgeslagen.';
+  'login.myiffr' = 'Login met MyIFFR-account';
+  'login.facebook' = 'Login met Facebook';
+  'login.anonymous' = 'Doorgaan zonder inloggen';
 }
 
 const texts = new Texts();
