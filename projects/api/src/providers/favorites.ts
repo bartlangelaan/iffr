@@ -13,7 +13,6 @@ class FavoritesProvider {
   private async getFionaIdFromFavorite(favorite: Favorite) {
     const f = await drupalFavorites.getFionaIdFromDrupalId(favorite.nodeId);
     if (!f) {
-      console.log('not found!', favorite);
       return null;
     }
 
