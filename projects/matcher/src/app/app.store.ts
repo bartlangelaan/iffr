@@ -90,7 +90,10 @@ class AppStore {
   fetch(path: string) {
     return fetch('https://test.api.iffr.com' + path, {
       headers: { authorization: 'Bearer ' + this.accessToken },
-    }).then(a => a.json());
+    }).then(a => {
+      if (!a.ok) throw new Error(a.statusText);
+      return a.json();
+    });
   }
 
   @action.bound
@@ -100,17 +103,21 @@ class AppStore {
     localStorage.setItem('accessToken', accessToken);
     this.screen = Screen.Matching;
 
-    this.fetch('/users/me').then(
-      action((user: UserResponse) => {
-        this.user = user;
-      }),
-    );
+    this.fetch('/users/me')
+      .then(
+        action((user: UserResponse) => {
+          this.user = user;
+        }),
+      )
+      .catch(this.unauthorize);
 
-    this.fetch('/users/me/favorites').then(
-      action((favorites: FavoritesResponse) => {
-        this.favorites = favorites;
-      }),
-    );
+    this.fetch('/users/me/favorites')
+      .then(
+        action((favorites: FavoritesResponse) => {
+          this.favorites = favorites;
+        }),
+      )
+      .catch(this.unauthorize);
   }
 
   @action.bound
