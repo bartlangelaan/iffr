@@ -20,25 +20,31 @@ class FavoritesProvider {
     return { id: f.fiona, type: f.type };
   }
 
-  async get(user: string) {
+  // Utility function: checks if an item is null.
+  notNull<T>(value: T | null): value is T {
+    return value !== null;
+  }
+
+  async get(user: string): Promise<FavoriteResponse> {
     const favorites = await drupalFavorites.list(user);
-    console.log(favorites);
 
-    const likes = Promise.all(
-      favorites
-        .filter(f => f.type !== 'dislike')
-        .map(this.getFionaIdFromFavorite),
-    );
+    const [likes, dislikes] = await Promise.all([
+      Promise.all(
+        favorites
+          .filter(f => f.type !== 'dislike')
+          .map(this.getFionaIdFromFavorite),
+      ),
 
-    const dislikes = Promise.all(
-      favorites
-        .filter(f => f.type === 'dislike')
-        .map(this.getFionaIdFromFavorite),
-    );
+      Promise.all(
+        favorites
+          .filter(f => f.type === 'dislike')
+          .map(this.getFionaIdFromFavorite),
+      ),
+    ]);
 
     return {
-      likes: (await likes).filter(a => a !== null),
-      dislikes: (await dislikes).filter(a => a !== null),
+      likes: likes.filter(this.notNull),
+      dislikes: dislikes.filter(this.notNull),
     };
   }
 
@@ -88,6 +94,16 @@ class FavoritesProvider {
 
     await drupalFavorites.delete(user, existingFavorite.id);
   }
+}
+
+interface FavoriteResponse {
+  likes: FavoriteResponseItem[];
+  dislikes: FavoriteResponseItem[];
+}
+
+interface FavoriteResponseItem {
+  id: string;
+  type: string;
 }
 
 export default new FavoritesProvider();
