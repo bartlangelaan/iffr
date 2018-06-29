@@ -13,6 +13,7 @@ export enum Screen {
   Login,
   Matching,
   Planning,
+  Profile,
 }
 
 export enum Language {
