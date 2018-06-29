@@ -19,7 +19,10 @@ export default class MatchScreen extends React.Component {
         <h1>{s ? s.title : 'Laden...'}</h1>
         <p>{description}</p>
         <p>
-          <button onClick={() => store.like(s!.id)} disabled={actionsDisabled}>
+          <button
+            onClick={() => store.dislike(s!.id)}
+            disabled={actionsDisabled}
+          >
             Niet leuk
           </button>
           <button onClick={() => store.like(s!.id)} disabled={actionsDisabled}>
