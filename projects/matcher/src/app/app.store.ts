@@ -1,11 +1,4 @@
-import {
-  observable,
-  configure,
-  action,
-  autorun,
-  decorate,
-  computed,
-} from 'mobx';
+import { observable, configure, action } from 'mobx';
 import { stringify } from 'querystring';
 
 configure({
@@ -87,12 +80,24 @@ class AppStore {
     }
   }
 
-  fetch(path: string) {
-    return fetch('https://test.api.iffr.com' + path, {
-      headers: { authorization: 'Bearer ' + this.accessToken },
-    }).then(a => {
+  fetch(path: string, body?: object) {
+    const opts: RequestInit = {};
+    const headers: { [h: string]: string } = {};
+
+    if (this.accessToken) {
+      headers.authorization = 'Bearer ' + this.accessToken;
+    }
+
+    if (body) {
+      opts.method = 'POST';
+      headers['content-type'] = 'application/x-www-form-urlencoded';
+      opts.body = stringify(body);
+    }
+
+    opts.headers = headers;
+    return fetch('https://test.api.iffr.com' + path, opts).then(a => {
       if (!a.ok) throw new Error(a.statusText);
-      return a.json();
+      return a.json().catch(() => null);
     });
   }
 
@@ -103,22 +108,34 @@ class AppStore {
     localStorage.setItem('accessToken', accessToken);
     this.screen = Screen.Matching;
 
-    this.fetch('/users/me')
-      .then(
-        action((user: UserResponse) => {
-          this.user = user;
-        }),
-      )
-      .catch(this.unauthorize);
+    this.fetch('/users/me').then(
+      action((user: UserResponse) => {
+        this.user = user;
+      }),
+      this.unauthorize,
+    );
 
-    this.fetch('/users/me/favorites')
-      .then(
-        action((favorites: FavoritesResponse) => {
-          this.favorites = favorites;
-        }),
-      )
-      .catch(this.unauthorize);
+    this.fetchFavorites();
+    this.fetchSuggestion();
   }
+
+  fetchFavorites = () => {
+    this.fetch('/users/me/favorites').then(
+      action((favorites: FavoritesResponse) => {
+        this.favorites = favorites;
+      }),
+      this.unauthorize,
+    );
+  };
+
+  fetchSuggestion = () => {
+    this.fetch('/users/me/favorites/suggestion?year=2018').then(
+      action((suggestion: SuggestionResponse) => {
+        this.suggestion = suggestion;
+      }),
+      this.unauthorize,
+    );
+  };
 
   @action.bound
   unauthorize() {
@@ -142,6 +159,32 @@ class AppStore {
   @observable user: UserResponse | null = null;
 
   @observable favorites: FavoritesResponse | null = null;
+
+  @observable suggestion: SuggestionResponse | null = null;
+
+  like(id: string) {
+    this.sendFavorite('like', id);
+  }
+
+  dislike(id: string) {
+    this.sendFavorite('dislike', id);
+  }
+
+  @observable changingFavorite: string[] = [];
+
+  @action.bound
+  private sendFavorite(favAction: 'like' | 'dislike', id: string) {
+    this.suggestion = null;
+    this.fetch('/users/me/favorites', {
+      id,
+      action: favAction,
+    }).then(
+      action(() => {
+        this.fetchFavorites();
+        this.fetchSuggestion();
+      }),
+    );
+  }
 }
 
 interface UserResponse {
@@ -160,8 +203,28 @@ interface FavoritesResponse {
   likes: Favorite[];
   dislikes: Favorite[];
 }
-const store = new AppStore();
 
-//
+interface SuggestionResponse {
+  suggestions_left: number;
+  suggestion: {
+    id: string;
+    title: string;
+    lengthInMinutes: number;
+    yearOfProduction: number;
+    description: {
+      catalogus?: {
+        dutch: string;
+        english: string;
+      };
+      'a-tot-z'?: {
+        dutch: string;
+        english: string;
+      };
+    };
+    genre: string;
+  };
+}
+
+const store = new AppStore();
 
 export default store;
