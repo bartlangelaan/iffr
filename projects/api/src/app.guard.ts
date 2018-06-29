@@ -4,6 +4,9 @@ import {
   CanActivate,
   ExecutionContext,
   createParamDecorator,
+  UnauthorizedException,
+  ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { getClientBySecret } from './clients';
@@ -49,7 +52,11 @@ export class ApplicationGuard implements CanActivate {
       client = getClientBySecret(query.client_secret);
 
       // If there is no client with that secret, return don't allow access.
-      if (!client) return false;
+      if (!client) {
+        throw new UnauthorizedException(
+          'The client_secret provided is incorrect.',
+        );
+      }
 
       // This is a server-to-server request, so use the 'secure' permissions.
       permissionsType = 'secure';
@@ -64,13 +71,17 @@ export class ApplicationGuard implements CanActivate {
         client = decrypted.client;
         user = decrypted.text;
       } catch (e) {
-        return false;
+        throw new UnauthorizedException(
+          'The bearer token provided is incorrect. ' + e.message,
+        );
       }
 
       // This is a client-to-server request, so use the 'unsecure' permissions.
       permissionsType = 'unsecure';
     } else {
-      return false;
+      throw new UnauthorizedException(
+        'There is no authentication method provided, but this is an authenticated route. Please use the Authorization header or the client_secret query parameter.',
+      );
     }
 
     // Get the right permissons, based on the type of the requester (client / server).
@@ -87,10 +98,14 @@ export class ApplicationGuard implements CanActivate {
         }
       });
 
-      // Set the user variable to whoever is information is requested about, wether that is
+      // Set the user variable to whoever is information is requested about, whether that is
       // 'me' or an user id.
       if (params.user === 'me') {
-        if (!user) return false;
+        if (!user) {
+          throw new BadRequestException(
+            "You can't use 'me' as user id when not using a personal token.",
+          );
+        }
       } else {
         user = params.user;
       }
@@ -100,7 +115,16 @@ export class ApplicationGuard implements CanActivate {
     request.user = user;
 
     // Return true if all permissions required are available.
-    return permissionsRequired.every(r => permissions.includes(r));
+    const permissionsNotHaving = permissionsRequired.filter(
+      r => !permissions.includes(r),
+    );
+    if (permissionsNotHaving.length) {
+      throw new ForbiddenException(
+        'The client needs the following permissions that it doesnt have: ' +
+          permissions.join(', '),
+      );
+    }
+    return true;
   }
 }
 
