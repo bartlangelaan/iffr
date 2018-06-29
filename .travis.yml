@@ -4,15 +4,27 @@ node_js:
 
 install: 
   - npm install
-  - cd projects/api && npm install && cd ../..
+  - cd projects/api
+  - npm install
+  - cd ../matcher 
+  - npm install 
+  - cd ../..
 
 script: 
   - npm test
+  - cd projects/matcher
+  - npm run build
 
-before_deploy: cd projects/api
+before_deploy: cd ../api
 
 deploy:
-  provider: heroku
-  api_key: $HEROKU_API_KEY
-  app: iffr-api
-  on: master
+  - provider: pages
+    local-dir: ../matcher
+    skip_cleanup: true
+    github-token: $GITHUB_TOKEN
+    keep-history: true
+    on: master
+  - provider: heroku
+    api_key: $HEROKU_API_KEY
+    app: iffr-api
+    on: master
