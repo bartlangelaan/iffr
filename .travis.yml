@@ -19,7 +19,7 @@ before_deploy: cd ../api
 
 deploy:
   - provider: pages
-    local-dir: ../matcher
+    local-dir: projects/matcher/build
     skip_cleanup: true
     github-token: $GITHUB_TOKEN
     keep-history: true
