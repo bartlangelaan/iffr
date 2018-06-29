@@ -1,4 +1,11 @@
-import { observable, configure, action, autorun, decorate } from 'mobx';
+import {
+  observable,
+  configure,
+  action,
+  autorun,
+  decorate,
+  computed,
+} from 'mobx';
 import { stringify } from 'querystring';
 
 configure({
@@ -80,12 +87,30 @@ class AppStore {
     }
   }
 
+  fetch(path: string) {
+    return fetch('https://test.api.iffr.com' + path, {
+      headers: { authorization: 'Bearer ' + this.accessToken },
+    }).then(a => a.json());
+  }
+
   @action.bound
   authorize(accessToken: string) {
     this.authState = AuthState.Authorized;
     this.accessToken = accessToken;
     localStorage.setItem('accessToken', accessToken);
     this.screen = Screen.Matching;
+
+    this.fetch('/users/me').then(
+      action((user: UserResponse) => {
+        this.user = user;
+      }),
+    );
+
+    this.fetch('/users/me/favorites').then(
+      action((favorites: FavoritesResponse) => {
+        this.favorites = favorites;
+      }),
+    );
   }
 
   @action.bound
@@ -106,6 +131,27 @@ class AppStore {
   }
 
   @observable language: Language = Language.NL;
+
+  @observable user: UserResponse | null = null;
+
+  @observable favorites: FavoritesResponse | null = null;
+}
+
+interface UserResponse {
+  name: {
+    first: string;
+    full: string;
+  };
+  birthday: string | null;
+}
+
+interface Favorite {
+  id: string;
+  type: string;
+}
+interface FavoritesResponse {
+  likes: Favorite[];
+  dislikes: Favorite[];
 }
 const store = new AppStore();
 
