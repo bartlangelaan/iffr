@@ -139,6 +139,8 @@ class AppStore {
 
   @action.bound
   unauthorize() {
+    alert('Prevented unauthorizing!');
+    return;
     this.authState = AuthState.Unauthorized;
     this.accessToken = null;
     localStorage.removeItem('accessToken');

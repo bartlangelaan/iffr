@@ -8,6 +8,7 @@ import store, { Screen } from '../../app/app.store';
 import MatchScreen from './match.screen';
 import PlanningScreen from './planning.screen';
 import ProfileScreen from './profile.screen';
+import { Grid } from '@material-ui/core';
 
 @observer
 export default class MainScreen extends React.Component {
@@ -32,20 +33,29 @@ export default class MainScreen extends React.Component {
     else return 'Screen not found!';
 
     return (
-      <div>
-        <AppBar position="static">
-          <Tabs
-            value={store.screen}
-            onChange={(_, screen: Screen) => store.setScreen(screen)}
-            centered
-          >
-            <Tab label="Matchen" value={Screen.Matching} />
-            <Tab label="Plannen" value={Screen.Planning} />
-            <Tab label="Profiel" value={Screen.Profile} />
-          </Tabs>
-        </AppBar>
-        <ScreenComponent />
-      </div>
+      <Grid
+        container
+        direction="column"
+        style={{ height: '100%' }}
+        wrap="nowrap"
+      >
+        <Grid item>
+          <AppBar position="static">
+            <Tabs
+              value={store.screen}
+              onChange={(_, screen: Screen) => store.setScreen(screen)}
+              centered
+            >
+              <Tab label="Matchen" value={Screen.Matching} />
+              <Tab label="Plannen" value={Screen.Planning} />
+              <Tab label="Profiel" value={Screen.Profile} />
+            </Tabs>
+          </AppBar>
+        </Grid>
+        <Grid item style={{ flexGrow: 1 }} container>
+          <ScreenComponent />
+        </Grid>
+      </Grid>
     );
   }
 }
