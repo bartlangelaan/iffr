@@ -42,46 +42,41 @@ export default class MatchScreen extends React.Component {
           <p>{description}</p>
         </Grid>
         <Grid item container direction="row" justify="space-around">
-          <Grid item style={{ width: '33%', minWidth: 100 }}>
-            <MuiThemeProvider theme={redTheme}>
-              <Button
-                onClick={() => store.dislike(s!.id)}
-                disabled={actionsDisabled}
-                color="primary"
-                variant="raised"
-                style={{ width: '100%' }}
-              >
-                <Grid container direction="column">
-                  <Grid item>
-                    <ThumbDownIcon />
-                  </Grid>
-                  <Grid>Niet leuk</Grid>
-                </Grid>
-              </Button>
-            </MuiThemeProvider>
-          </Grid>
-          <Grid item style={{ width: '33%', minWidth: 100 }}>
-            <MuiThemeProvider theme={greenTheme}>
-              <Button
-                onClick={() => store.like(s!.id)}
-                disabled={actionsDisabled}
-                variant="raised"
-                color="primary"
-                style={{ width: '100%' }}
-              >
-                <Grid container direction="column">
-                  <Grid item>
-                    <ThumbUpIcon />
-                  </Grid>
-                  <Grid>Leuk</Grid>
-                </Grid>
-              </Button>
-            </MuiThemeProvider>
-          </Grid>
+          <FavoriteButton action="dislike" disabled={actionsDisabled} s={s!} />
+          <FavoriteButton action="like" disabled={actionsDisabled} s={s!} />
         </Grid>
       </Grid>
     );
   }
+}
+
+// tslint:disable-next-line:function-name
+function FavoriteButton({ action, disabled, s }: FavoriteButtonProps) {
+  return (
+    <Grid item style={{ width: '33%', minWidth: 100 }}>
+      <MuiThemeProvider theme={action === 'like' ? greenTheme : redTheme}>
+        <Button
+          onClick={() => store[action](s.id)}
+          disabled={disabled}
+          variant="raised"
+          color="primary"
+          style={{ width: '100%' }}
+        >
+          <Grid container direction="column">
+            <Grid item>
+              {action === 'like' ? <ThumbUpIcon /> : <ThumbDownIcon />}
+            </Grid>
+            <Grid>{action === 'like' ? 'Leuk' : 'Niet leuk'}</Grid>
+          </Grid>
+        </Button>
+      </MuiThemeProvider>
+    </Grid>
+  );
+}
+interface FavoriteButtonProps {
+  action: 'like' | 'dislike';
+  disabled: boolean;
+  s: { id: string };
 }
 const redTheme = createMuiTheme({
   palette: {

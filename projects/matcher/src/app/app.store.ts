@@ -204,7 +204,7 @@ interface FavoritesResponse {
   dislikes: Favorite[];
 }
 
-interface SuggestionResponse {
+export interface SuggestionResponse {
   suggestions_left: number;
   suggestion: {
     id: string;
