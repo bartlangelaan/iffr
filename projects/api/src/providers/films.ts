@@ -81,6 +81,13 @@ export class FilmsProvider {
       genre: film.genre.key,
       sections: film.sections.map(s => this.formatTranslatable(s.section)),
       shows: shows.filter(s => s !== null),
+      credits: film.credits.map(c => ({
+        name: c.fullName,
+        role: this.formatTranslatable(c.role),
+      })),
+      media: film.publications
+        .filter(p => p.type.key === 'video')
+        .map(p => ({ type: 'video', value: p.value })),
     };
   }
 

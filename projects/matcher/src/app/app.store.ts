@@ -222,7 +222,15 @@ export interface SuggestionResponse {
       };
     };
     genre: string;
+    credits: { name: string; role: FormattedTranslatable }[];
+    media: { type: string; value: string }[];
   };
+}
+
+export interface FormattedTranslatable {
+  key: string;
+  nl: string;
+  en: string;
 }
 
 const store = new AppStore();

@@ -101,12 +101,27 @@ export interface FionaPublicationApiFilm {
     };
     type: FionaPublicationAPITranslatableOption;
   }[];
+  credits: {
+    id: string;
+    fullName: string;
+    person: {
+      id: string;
+      description: string;
+    };
+    role: FionaPublicationAPITranslatableOption;
+  }[];
   fullOriginalTitle: string;
   fullPreferredTitle: string;
   genre: FionaPublicationAPITranslatableOption;
   lengthInMinutes: number;
   originalTitle: string;
   premiere: FionaPublicationAPITranslatableOption;
+  publications: {
+    id: string;
+    title: string;
+    type: FionaPublicationAPITranslatableOption;
+    value: string;
+  }[];
   sections: {
     id: string;
     name: string;
