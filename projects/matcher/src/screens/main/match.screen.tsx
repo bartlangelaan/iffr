@@ -42,7 +42,7 @@ export default class MatchScreen extends React.Component {
           <p>{description}</p>
         </Grid>
         <Grid item container direction="row" justify="space-around">
-          <Grid item xs={4}>
+          <Grid item style={{ width: '33%', minWidth: 100 }}>
             <MuiThemeProvider theme={redTheme}>
               <Button
                 onClick={() => store.dislike(s!.id)}
@@ -60,7 +60,7 @@ export default class MatchScreen extends React.Component {
               </Button>
             </MuiThemeProvider>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item style={{ width: '33%', minWidth: 100 }}>
             <MuiThemeProvider theme={greenTheme}>
               <Button
                 onClick={() => store.like(s!.id)}
