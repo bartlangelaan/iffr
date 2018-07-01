@@ -26,7 +26,7 @@ export default class MatchScreen extends React.Component {
         container
         style={{
           maxWidth: 800,
-          width: '80%',
+          width: '90%',
           margin: '0 auto',
         }}
         justify={'space-between'}
