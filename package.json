@@ -11,7 +11,5 @@
     "tslint-plugin-prettier": "^1.3.0",
     "typescript": "^2.9.2"
   },
-  "dependencies": {
-    "@material-ui/icons": "^1.1.0"
-  }
+  "dependencies": {}
 }
