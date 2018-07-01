@@ -4,7 +4,9 @@ import store from '../../app/app.store';
 import Button from '@material-ui/core/Button';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import { Grid } from '@material-ui/core';
+import { Grid, createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import red from '@material-ui/core/colors/red';
+import green from '@material-ui/core/colors/green';
 
 @observer
 export default class MatchScreen extends React.Component {
@@ -41,37 +43,58 @@ export default class MatchScreen extends React.Component {
         </Grid>
         <Grid item container direction="row" justify="space-around">
           <Grid item xs={4}>
-            <Button
-              onClick={() => store.dislike(s!.id)}
-              disabled={actionsDisabled}
-              variant="raised"
-              style={{ width: '100%' }}
-            >
-              <Grid container direction="column">
-                <Grid item>
-                  <ThumbDownIcon />
+            <MuiThemeProvider theme={redTheme}>
+              <Button
+                onClick={() => store.dislike(s!.id)}
+                disabled={actionsDisabled}
+                color="primary"
+                variant="raised"
+                style={{ width: '100%' }}
+              >
+                <Grid container direction="column">
+                  <Grid item>
+                    <ThumbDownIcon />
+                  </Grid>
+                  <Grid>Niet leuk</Grid>
                 </Grid>
-                <Grid>Niet leuk</Grid>
-              </Grid>
-            </Button>
+              </Button>
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs={4}>
-            <Button
-              onClick={() => store.like(s!.id)}
-              disabled={actionsDisabled}
-              variant="raised"
-              style={{ width: '100%' }}
-            >
-              <Grid container direction="column">
-                <Grid item>
-                  <ThumbUpIcon />
+            <MuiThemeProvider theme={greenTheme}>
+              <Button
+                onClick={() => store.like(s!.id)}
+                disabled={actionsDisabled}
+                variant="raised"
+                color="primary"
+                style={{ width: '100%' }}
+              >
+                <Grid container direction="column">
+                  <Grid item>
+                    <ThumbUpIcon />
+                  </Grid>
+                  <Grid>Leuk</Grid>
                 </Grid>
-                <Grid>Leuk</Grid>
-              </Grid>
-            </Button>
+              </Button>
+            </MuiThemeProvider>
           </Grid>
         </Grid>
       </Grid>
     );
   }
 }
+const redTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: red[500],
+    },
+  },
+});
+
+const greenTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: green[600],
+    },
+  },
+});
