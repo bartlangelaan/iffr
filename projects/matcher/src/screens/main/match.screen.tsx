@@ -44,12 +44,12 @@ export default class MatchScreen extends React.Component {
             <Button
               onClick={() => store.dislike(s!.id)}
               disabled={actionsDisabled}
-              variant="outlined"
+              variant="raised"
               style={{ width: '100%' }}
             >
               <Grid container direction="column">
                 <Grid item>
-                  <ThumbUpIcon />
+                  <ThumbDownIcon />
                 </Grid>
                 <Grid>Niet leuk</Grid>
               </Grid>
@@ -59,7 +59,7 @@ export default class MatchScreen extends React.Component {
             <Button
               onClick={() => store.like(s!.id)}
               disabled={actionsDisabled}
-              variant="outlined"
+              variant="raised"
               style={{ width: '100%' }}
             >
               <Grid container direction="column">
