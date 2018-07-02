@@ -70,7 +70,7 @@ function SuggestionVideo({ s }: { s: null | { media: { value: string }[] } }) {
         position: 'relative',
         width: '100%',
         height: 0,
-        paddingBottom: '51%',
+        paddingBottom: '56.25%',
       }}
     >
       <Iframe
