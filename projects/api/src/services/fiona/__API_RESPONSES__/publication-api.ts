@@ -104,7 +104,7 @@ export interface FionaPublicationApiFilm {
   credits: {
     id: string;
     fullName: string;
-    person: {
+    person: null | {
       id: string;
       description: string;
     };
