@@ -90,9 +90,12 @@ export class UsersController {
       filmsNotFavorited.map(film => this.films.get(film.id)),
     );
 
-    // Only the feature films with at least one show.
+    // Only the feature films with at least one show and a trailer.
     const features = fullFilmsNotFavorited.filter(
-      film => film.category.key === 'speelfilm' && film.shows.length,
+      film =>
+        film.category.key === 'speelfilm' &&
+        film.shows.length &&
+        film.media.length,
     );
 
     return {
