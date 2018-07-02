@@ -13,16 +13,11 @@ import userProvider from '../providers/user';
 import ttUser from '../services/tickettrigger/user';
 import { RequirePermissions, User } from '../app.guard';
 import { ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
-import { FilmsProvider } from '../providers/films';
-import { FavoritesProvider } from '../providers/favorites';
+import filmsProviders from '../providers/films';
+import favorites from '../providers/favorites';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly films: FilmsProvider,
-    private readonly favoritesProvider: FavoritesProvider,
-  ) {}
-
   @Get()
   @RequirePermissions('users.view')
   @ApiUseTags('users')
@@ -42,7 +37,7 @@ export class UsersController {
   @RequirePermissions('this_user.favorites.view')
   @ApiUseTags('favorites')
   favorites(@User() user: string) {
-    return this.favoritesProvider.get(user);
+    return favorites.get(user);
   }
 
   @Post('/:user/favorites')
@@ -56,14 +51,14 @@ export class UsersController {
     if (action !== 'like' && action !== 'dislike') {
       throw new BadRequestException();
     }
-    return this.favoritesProvider.add(user, action, id);
+    return favorites.add(user, action, id);
   }
 
   @Delete('/:user/favorites')
   @RequirePermissions('this_user.favorites.edit')
   @ApiUseTags('favorites')
   deleteFavorite(@User() user: string, @Body('id') id: string) {
-    return this.favoritesProvider.delete(user, id);
+    return favorites.delete(user, id);
   }
 
   @Get('/:user/favorites/suggestion')
@@ -76,8 +71,8 @@ export class UsersController {
   ) {
     // Get a list of all films and all favorites.
     const [films, favs] = await Promise.all([
-      this.films.list(year),
-      this.favoritesProvider.get(user),
+      filmsProviders.list(year),
+      favorites.get(user),
     ]);
 
     // Combine the likes and dislikes.
@@ -90,7 +85,7 @@ export class UsersController {
 
     // We need the full film objects, so we can filter on type.
     const fullFilmsNotFavorited = await Promise.all(
-      filmsNotFavorited.map(film => this.films.get(film.id)),
+      filmsNotFavorited.map(film => filmsProviders.get(film.id)),
     );
 
     // Only the feature films with at least one show and a trailer.

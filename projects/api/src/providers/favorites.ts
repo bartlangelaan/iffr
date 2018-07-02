@@ -1,6 +1,6 @@
 import drupalFavorites, { Favorite } from '../services/drupal/favorites';
 import { NotFoundException, Injectable } from '@nestjs/common';
-import { FionaPublicationApi } from '../services/fiona/publication-api';
+import fiona from '../services/fiona/publication-api';
 
 type FavoriteType = 'like' | 'dislike';
 
@@ -9,10 +9,7 @@ type FavoriteType = 'like' | 'dislike';
  * If we add a favorite as 'like' but it was already a 'dislike', we change the status.
  * If a favorite is removed, it is neither a like or dislike. It's just gone.
  */
-@Injectable()
-export class FavoritesProvider {
-  constructor(private readonly fiona: FionaPublicationApi) {}
-
+class FavoritesProvider {
   private getFionaIdFromFavorite = async (favorite: Favorite) => {
     const f = await drupalFavorites.getFionaIdFromDrupalId(favorite.nodeId);
     if (!f) {
@@ -20,7 +17,7 @@ export class FavoritesProvider {
     }
 
     try {
-      const film = await this.fiona.film(f.fiona);
+      const film = await fiona.film(f.fiona);
       if (!film) {
         return null;
       }
@@ -106,6 +103,8 @@ export class FavoritesProvider {
     await drupalFavorites.delete(user, existingFavorite.id);
   }
 }
+
+export default new FavoritesProvider();
 
 interface FavoriteResponse {
   likes: FavoriteResponseItem[];

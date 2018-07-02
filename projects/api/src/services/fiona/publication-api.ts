@@ -23,8 +23,7 @@ import { getFionaPublicationApiKey } from '../../utils/environment';
 /// <reference path="../../../types/promise-queue.d.ts" />
 import * as Queue from 'promise-queue';
 
-@Injectable()
-export class FionaPublicationApi {
+class FionaPublicationApi {
   private cache: FionaCache = {
     editionTypes: undefined,
     editions: undefined,
@@ -171,6 +170,8 @@ export class FionaPublicationApi {
     return show;
   }
 }
+
+export default new FionaPublicationApi();
 
 interface FionaCache {
   editionTypes: undefined | Promise<FionaPublicationApiEditionTypes>;
