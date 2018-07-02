@@ -38,6 +38,7 @@ export default class MatchScreen extends React.Component {
           item
           style={{ flexGrow: 1, width: '100%', overflow: 'scroll', height: 0 }}
         >
+          <SuggestionVideo s={s} />
           <h1>{s ? s.title : 'Laden...'}</h1>
           <p>{description}</p>
         </Grid>
@@ -48,6 +49,45 @@ export default class MatchScreen extends React.Component {
       </Grid>
     );
   }
+}
+
+const ytRegex = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/;
+
+// tslint:disable-next-line:function-name
+function SuggestionVideo({ s }: { s: null | { media: { value: string }[] } }) {
+  if (s === null || typeof s.media[0] === 'undefined') return null;
+
+  const tested = ytRegex.exec(s.media[0].value);
+  if (tested === null || !tested[1]) return null;
+  const ytId = tested[1];
+
+  // tslint:disable-next-line:variable-name
+  const Iframe: any = 'iframe';
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: 0,
+        paddingBottom: '51%',
+      }}
+    >
+      <Iframe
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          left: 0,
+          top: 0,
+        }}
+        src={`https://www.youtube-nocookie.com/embed/${ytId}?rel=0&amp;showinfo=0&amp;autoplay=1`}
+        frameBorder="0"
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+      />
+    </div>
+  );
 }
 
 // tslint:disable-next-line:function-name
