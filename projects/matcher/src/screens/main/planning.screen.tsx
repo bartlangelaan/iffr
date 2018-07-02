@@ -39,14 +39,14 @@ export default class PlanningScreen extends React.Component<
         <ul>
           {store.favorites &&
             store.favorites.likes.map(l => (
-              <li>
+              <li key={l.id}>
                 <label htmlFor={l.id}>
                   <Checkbox
                     type="checkbox"
                     name={l.id}
                     onClick={() => this.toggle(l.id)}
                   />
-                  {l.id}
+                  {l.title}
                 </label>
               </li>
             ))}

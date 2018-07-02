@@ -198,7 +198,7 @@ interface UserResponse {
 interface Favorite {
   id: string;
   type: string;
-  name: string;
+  title: string;
 }
 interface FavoritesResponse {
   likes: Favorite[];
