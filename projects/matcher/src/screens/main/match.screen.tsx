@@ -20,6 +20,9 @@ export default class MatchScreen extends React.Component {
       : null;
 
     const actionsDisabled = !s || store.changingFavorite.indexOf(s.id) !== -1;
+
+    const director =
+      (s && s.credits.find(c => c.role.key === 'director')) || null;
     return (
       <Grid
         item
@@ -41,6 +44,35 @@ export default class MatchScreen extends React.Component {
           <SuggestionVideo s={s} />
           <h1>{s ? s.title : 'Laden...'}</h1>
           <p>{description}</p>
+          {s !== null && (
+            <table
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                margin: '0 auto',
+                textAlign: 'left',
+              }}
+            >
+              <tbody>
+                <tr>
+                  <th style={{ width: '50%' }}>Genre</th>
+                  <td style={{ width: '50%' }}>
+                    {s.genre.charAt(0).toUpperCase() + s.genre.slice(1)}
+                  </td>
+                </tr>
+                <tr>
+                  <th style={{ width: '50%' }}>Lengte</th>
+                  <td style={{ width: '50%' }}>{s.lengthInMinutes} minuten</td>
+                </tr>
+                {director && (
+                  <tr>
+                    <th style={{ width: '50%' }}>Regisseur</th>
+                    <td style={{ width: '50%' }}>{director.name}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </Grid>
         <Grid item container direction="row" justify="space-around">
           <FavoriteButton action="dislike" disabled={actionsDisabled} s={s!} />
