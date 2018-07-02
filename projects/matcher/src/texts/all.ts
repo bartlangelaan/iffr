@@ -10,7 +10,7 @@ class Texts {
   };
   'explanation1.heading' = 'Suggesties';
   'explanation1.text' =
-    'Door films te beoordelen leren wij je smaak, en kunnen wij persoonlijke filmsuggesties doen.';
+    'Door films te beoordelen onthouden wij jouw voorkeuren, en kunnen wij persoonlijke filmsuggesties doen. Hoe meer films je beoordeelt, hoe beter de suggesties bij jou aansluiten!';
   'explanation2.heading' = 'Persoonlijk';
   'explanation2.text' =
     'Dit werkt het beste als je bent ingelogd. Je hoeft niet in te loggen, maar dan worden je suggesties niet opgeslagen.';
