@@ -10,15 +10,18 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import userProvider from '../providers/user';
-import favorites from '../providers/favorites';
 import ttUser from '../services/tickettrigger/user';
 import { RequirePermissions, User } from '../app.guard';
 import { ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
 import { FilmsProvider } from '../providers/films';
+import { FavoritesProvider } from '../providers/favorites';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly films: FilmsProvider) {}
+  constructor(
+    private readonly films: FilmsProvider,
+    private readonly favoritesProvider: FavoritesProvider,
+  ) {}
 
   @Get()
   @RequirePermissions('users.view')
@@ -39,7 +42,7 @@ export class UsersController {
   @RequirePermissions('this_user.favorites.view')
   @ApiUseTags('favorites')
   favorites(@User() user: string) {
-    return favorites.get(user);
+    return this.favoritesProvider.get(user);
   }
 
   @Post('/:user/favorites')
@@ -53,14 +56,14 @@ export class UsersController {
     if (action !== 'like' && action !== 'dislike') {
       throw new BadRequestException();
     }
-    return favorites.add(user, action, id);
+    return this.favoritesProvider.add(user, action, id);
   }
 
   @Delete('/:user/favorites')
   @RequirePermissions('this_user.favorites.edit')
   @ApiUseTags('favorites')
   deleteFavorite(@User() user: string, @Body('id') id: string) {
-    return favorites.delete(user, id);
+    return this.favoritesProvider.delete(user, id);
   }
 
   @Get('/:user/favorites/suggestion')
@@ -74,7 +77,7 @@ export class UsersController {
     // Get a list of all films and all favorites.
     const [films, favs] = await Promise.all([
       this.films.list(year),
-      favorites.get(user),
+      this.favoritesProvider.get(user),
     ]);
 
     // Combine the likes and dislikes.

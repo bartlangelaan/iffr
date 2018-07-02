@@ -7,6 +7,7 @@ import { ApplicationGuard } from './app.guard';
 import { FilmsProvider } from './providers/films';
 import { FionaPublicationApi } from './services/fiona/publication-api';
 import { FilmsController } from './controllers/films.controller';
+import { FavoritesProvider } from './providers/favorites';
 
 @Module({
   imports: [],
@@ -23,6 +24,7 @@ import { FilmsController } from './controllers/films.controller';
     },
     FilmsProvider,
     FionaPublicationApi,
+    FavoritesProvider,
   ],
 })
 export default class AppModule {}
