@@ -55,9 +55,12 @@ const ytRegex = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/;
 
 // tslint:disable-next-line:function-name
 function SuggestionVideo({ s }: { s: null | { media: { value: string }[] } }) {
-  if (s === null || typeof s.media[0] === 'undefined') return null;
+  if (s === null) return null;
 
-  const tested = ytRegex.exec(s.media[0].value);
+  const ytLink = s.media.find(m => ytRegex.test(m.value));
+  if (!ytLink) return null;
+
+  const tested = ytRegex.exec(ytLink.value);
   if (tested === null || !tested[1]) return null;
   const ytId = tested[1];
 
