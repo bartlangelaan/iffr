@@ -6,7 +6,7 @@
     "start": "webpack --mode=development",
     "add-to-hostfile": "sudo npx hostile set localhost localhost.api.iffr.com",
     "gen": "typescript-json-schema './src/**/__API_RESPONSES__/*.ts' \\* --required --strictNullChecks > ./src/utils/api-response-schemas.json",
-    "heroku-postbuild": "npm run gen && webpack --mode=production"
+    "heroku-postbuild": "npm run gen && webpack --mode=none"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.1",
