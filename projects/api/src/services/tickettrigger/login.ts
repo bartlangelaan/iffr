@@ -1,8 +1,10 @@
 import { stringify } from 'querystring';
+import { Injectable } from '@nestjs/common';
 
 const BASE_URL = 'https://tt.iffr.com';
 
-class TicketTriggerLogin {
+@Injectable()
+export class TicketTriggerLoginService {
   /**
    * This function returns the page the user should be redirected to if they
    * need to be authenticated. The successUrl is the url where the user is
@@ -51,5 +53,3 @@ class TicketTriggerLogin {
     `;
   }
 }
-
-export default new TicketTriggerLogin();

@@ -2,12 +2,14 @@ import fetch from 'node-fetch';
 import { getTicketTriggerPassword } from '../../utils/environment';
 import TicketTriggerUserSummary from './__API_RESPONSES__/user-summary';
 import { assure } from '../../utils/validate-schema';
+import { Injectable } from '@nestjs/common';
 
 const basicAuthString = Buffer.from(
   `iffr:${getTicketTriggerPassword()}`,
 ).toString('base64');
 
-class TicketTriggerUserService {
+@Injectable()
+export class TicketTriggerUserService {
   private async fetch(path: string) {
     const f = await fetch(`https://tt.iffr.com${path}`, {
       headers: {
@@ -37,5 +39,3 @@ class TicketTriggerUserService {
     return results;
   }
 }
-
-export default new TicketTriggerUserService();

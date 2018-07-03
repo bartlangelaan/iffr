@@ -9,20 +9,27 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
-import userProvider from '../providers/user';
-import ttUser from '../services/tickettrigger/user';
+import { UserProvider } from '../providers/user';
+import { TicketTriggerUserService } from '../services/tickettrigger/user';
 import { RequirePermissions, User } from '../app.guard';
 import { ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
-import filmsProviders from '../providers/films';
-import favorites from '../providers/favorites';
+import { FilmsProvider } from '../providers/films';
+import { FavoritesProvider } from '../providers/favorites';
 
 @Controller('users')
 export class UsersController {
+  constructor(
+    private readonly userProvider: UserProvider,
+    private readonly ttUserService: TicketTriggerUserService,
+    private readonly filmsProvider: FilmsProvider,
+    private readonly favoritesProvider: FavoritesProvider,
+  ) {}
+
   @Get()
   @RequirePermissions('users.view')
   @ApiUseTags('users')
   list(@Query('query') query: string) {
-    return ttUser.query(query);
+    return this.ttUserService.query(query);
   }
 
   @Get('/:user')
@@ -30,14 +37,14 @@ export class UsersController {
   @ApiImplicitParam({ name: 'user', type: 'String' })
   @ApiUseTags('users')
   overview(@User() user: string) {
-    return userProvider.getUser(user);
+    return this.userProvider.getUser(user);
   }
 
   @Get('/:user/favorites')
   @RequirePermissions('this_user.favorites.view')
   @ApiUseTags('favorites')
   favorites(@User() user: string) {
-    return favorites.get(user);
+    return this.filmsProvider.get(user);
   }
 
   @Post('/:user/favorites')
@@ -51,14 +58,14 @@ export class UsersController {
     if (action !== 'like' && action !== 'dislike') {
       throw new BadRequestException();
     }
-    return favorites.add(user, action, id);
+    return this.favoritesProvider.add(user, action, id);
   }
 
   @Delete('/:user/favorites')
   @RequirePermissions('this_user.favorites.edit')
   @ApiUseTags('favorites')
   deleteFavorite(@User() user: string, @Body('id') id: string) {
-    return favorites.delete(user, id);
+    return this.favoritesProvider.delete(user, id);
   }
 
   @Get('/:user/favorites/suggestion')
@@ -71,8 +78,8 @@ export class UsersController {
   ) {
     // Get a list of all films and all favorites.
     const [films, favs] = await Promise.all([
-      filmsProviders.list(year),
-      favorites.get(user),
+      this.filmsProvider.list(year),
+      this.favoritesProvider.get(user),
     ]);
 
     // Combine the likes and dislikes.
@@ -85,7 +92,7 @@ export class UsersController {
 
     // We need the full film objects, so we can filter on type.
     const fullFilmsNotFavorited = await Promise.all(
-      filmsNotFavorited.map(film => filmsProviders.get(film.id)),
+      filmsNotFavorited.map(film => this.filmsProvider.get(film.id)),
     );
 
     // Only the feature films with at least one show and a trailer.

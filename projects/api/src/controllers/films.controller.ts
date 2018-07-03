@@ -1,16 +1,18 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import filmsProvider from '../providers/films';
+import { FilmsProvider } from '../providers/films';
 import { ApiUseTags } from '@nestjs/swagger';
 
 @Controller('films')
 @ApiUseTags('films')
 export class FilmsController {
+  constructor(private readonly filmsProvider: FilmsProvider) {}
+
   @Get('/list/:year')
   async list(
     @Param('year', new ParseIntPipe())
     year: number,
   ) {
-    return filmsProvider.list(year);
+    return this.filmsProvider.list(year);
   }
 
   @Get('/list/:year/extended')
@@ -18,7 +20,7 @@ export class FilmsController {
     @Param('year', new ParseIntPipe())
     year: number,
   ) {
-    return filmsProvider.list(year, true);
+    return this.filmsProvider.list(year, true);
   }
 
   @Get('/list/:year/full')
@@ -26,7 +28,7 @@ export class FilmsController {
     @Param('year', new ParseIntPipe())
     year: number,
   ) {
-    const list = await filmsProvider.list(year);
-    return Promise.all(list.map(f => filmsProvider.get(f.id)));
+    const list = await this.filmsProvider.list(year);
+    return Promise.all(list.map(f => this.filmsProvider.get(f.id)));
   }
 }

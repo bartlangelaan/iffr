@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import fiona from '../services/fiona/publication-api';
+import { FionaPublicationApiService } from '../services/fiona/publication-api';
 import {
   FilmId,
   FionaPublicationAPIFilmsListItem,
@@ -10,7 +10,12 @@ import {
 } from '../services/fiona/__API_RESPONSES__/publication-api';
 import * as sanitize from 'sanitize-html';
 
-class FilmsProvider {
+@Injectable()
+export class FilmsProvider {
+  constructor(
+    private readonly fionaPublicationService: FionaPublicationApiService,
+  ) {}
+
   private formatText(t: FionaPublicationAPIDescription) {
     return t.html.reduce<any>((des, item) => {
       des[item.language.key] = sanitize(item.html, {
@@ -42,15 +47,15 @@ class FilmsProvider {
   }
 
   async list(year: number, extended: boolean = false) {
-    const edition = await fiona.edition(year);
+    const edition = await this.fionaPublicationService.edition(year);
     if (!edition) throw new NotFoundException('Year does not exist.');
 
     if (!extended) {
-      const films = await fiona.films(edition.id);
+      const films = await this.fionaPublicationService.films(edition.id);
       return films.map(f => ({ id: f.id, title: f.fullPreferredTitle }));
     }
 
-    const films = await fiona.filmsAZ(edition.id);
+    const films = await this.fionaPublicationService.filmsAZ(edition.id);
     return films.map(f => ({
       id: f.id,
       title: f.fullPreferredTitle,
@@ -61,7 +66,7 @@ class FilmsProvider {
   }
 
   async get(filmid: FilmId) {
-    const film = await fiona.film(filmid);
+    const film = await this.fionaPublicationService.film(filmid);
 
     const shows = await Promise.all(
       film.shows.map(s => this.getShow(s.id).catch(e => null)),
@@ -89,7 +94,7 @@ class FilmsProvider {
   }
 
   async getShow(showId: ShowId) {
-    const show = await fiona.show(showId);
+    const show = await this.fionaPublicationService.show(showId);
 
     return {
       id: show.id,
@@ -102,5 +107,3 @@ class FilmsProvider {
     };
   }
 }
-
-export default new FilmsProvider();

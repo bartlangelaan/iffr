@@ -2,7 +2,7 @@
  * We fake the complete oauth flow. We do this until a real oauth provider
  * comes along.
  */
-import login from '../services/tickettrigger/login';
+import { TicketTriggerLoginService } from '../services/tickettrigger/login';
 import { URL } from 'url';
 import { tokenCrypto } from '../app.guard';
 import { getClient } from '../clients';
@@ -26,6 +26,7 @@ const codeCrypto = new TimeClientBasedCrypto(60, getApiCodeSalt());
 @Controller('oauth2')
 @ApiUseTags('oauth2')
 export class OAuth2Controller {
+  constructor(private readonly ttLoginService: TicketTriggerLoginService) {}
   /**
    * Users are redirected to this endpoint when they need to be authenticated.
    *
@@ -43,7 +44,7 @@ export class OAuth2Controller {
 
     const url = getCallbackUrl(req, '/oauth2/tt-callback');
 
-    res.redirect(login.getRedirectUrl(url));
+    res.redirect(this.ttLoginService.getRedirectUrl(url));
   }
 
   /**
@@ -53,7 +54,7 @@ export class OAuth2Controller {
   @Get('/tt-callback')
   authorizeCallback1(@Req() req: any) {
     const url = getCallbackUrl(req, '/oauth2/tt-callback2');
-    return login.generatePageToGetUserUuid(url);
+    return this.ttLoginService.generatePageToGetUserUuid(url);
   }
 
   /**

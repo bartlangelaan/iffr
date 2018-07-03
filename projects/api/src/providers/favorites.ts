@@ -1,6 +1,6 @@
-import drupalFavorites, { Favorite } from '../services/drupal/favorites';
+import { DrupalFavoritesService, Favorite } from '../services/drupal/favorites';
 import { NotFoundException, Injectable } from '@nestjs/common';
-import fiona from '../services/fiona/publication-api';
+import { FionaPublicationApiService } from '../services/fiona/publication-api';
 
 type FavoriteType = 'like' | 'dislike';
 
@@ -9,15 +9,23 @@ type FavoriteType = 'like' | 'dislike';
  * If we add a favorite as 'like' but it was already a 'dislike', we change the status.
  * If a favorite is removed, it is neither a like or dislike. It's just gone.
  */
-class FavoritesProvider {
+@Injectable()
+export class FavoritesProvider {
+  constructor(
+    private readonly drupalFavoritesService: DrupalFavoritesService,
+    private readonly fionaPublicationService: FionaPublicationApiService,
+  ) {}
+
   private getFionaIdFromFavorite = async (favorite: Favorite) => {
-    const f = await drupalFavorites.getFionaIdFromDrupalId(favorite.nodeId);
+    const f = await this.drupalFavoritesService.getFionaIdFromDrupalId(
+      favorite.nodeId,
+    );
     if (!f) {
       return null;
     }
 
     try {
-      const film = await fiona.film(f.fiona);
+      const film = await this.fionaPublicationService.film(f.fiona);
       if (!film) {
         return null;
       }
@@ -34,7 +42,7 @@ class FavoritesProvider {
   }
 
   async get(user: string): Promise<FavoriteResponse> {
-    const favorites = await drupalFavorites.list(user);
+    const favorites = await this.drupalFavoritesService.list(user);
 
     const [likes, dislikes] = await Promise.all([
       Promise.all(
@@ -57,12 +65,14 @@ class FavoritesProvider {
   }
 
   async add(user: string, action: FavoriteType, film: string) {
-    const drupalId = await drupalFavorites.getDrupalIdFromFionaId(film);
+    const drupalId = await this.drupalFavoritesService.getDrupalIdFromFionaId(
+      film,
+    );
     if (!drupalId) {
       throw new NotFoundException('Item not found.');
     }
 
-    const currentFavorites = await drupalFavorites.list(user);
+    const currentFavorites = await this.drupalFavoritesService.list(user);
     const existingFavorite = currentFavorites.find(
       f => f.nodeId === drupalId.id,
     );
@@ -79,19 +89,21 @@ class FavoritesProvider {
 
     // If the favorite already exists but is of a different type, we should remove the old favorite first.
     if (existingFavorite) {
-      await drupalFavorites.delete(user, existingFavorite.id);
+      await this.drupalFavoritesService.delete(user, existingFavorite.id);
     }
 
     // Finally, add the favorite!
-    await drupalFavorites.add(user, drupalId.id, drupalType);
+    await this.drupalFavoritesService.add(user, drupalId.id, drupalType);
   }
 
   async delete(user: string, film: string) {
-    const drupalId = await drupalFavorites.getDrupalIdFromFionaId(film);
+    const drupalId = await this.drupalFavoritesService.getDrupalIdFromFionaId(
+      film,
+    );
     if (!drupalId) {
       throw new NotFoundException('Item not found.');
     }
-    const currentFavorites = await drupalFavorites.list(user);
+    const currentFavorites = await this.drupalFavoritesService.list(user);
     const existingFavorite = currentFavorites.find(
       f => f.nodeId === drupalId.id,
     );
@@ -100,11 +112,9 @@ class FavoritesProvider {
       throw new NotFoundException('Favorite not found.');
     }
 
-    await drupalFavorites.delete(user, existingFavorite.id);
+    await this.drupalFavoritesService.delete(user, existingFavorite.id);
   }
 }
-
-export default new FavoritesProvider();
 
 interface FavoriteResponse {
   likes: FavoriteResponseItem[];

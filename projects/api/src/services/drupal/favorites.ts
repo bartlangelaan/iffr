@@ -7,6 +7,7 @@ import {
   DrupalFavoritesFionaMapping,
 } from './__API_RESPONSES__/favorites';
 import { assure } from '../../utils/validate-schema';
+import { Injectable } from '@nestjs/common';
 
 type DrupalNodeId = string;
 
@@ -16,7 +17,8 @@ export interface Favorite {
   id: favoriteId;
 }
 
-class DrupalFavorites {
+@Injectable()
+export class DrupalFavoritesService {
   async fetch(url: string, postBody?: object) {
     let opts = undefined;
     if (postBody) {
@@ -132,5 +134,3 @@ class DrupalFavorites {
     return mapping.find(i => i.fiona === fionaId);
   }
 }
-
-export default new DrupalFavorites();

@@ -1,11 +1,14 @@
+import { Injectable } from '@nestjs/common';
+
 const upSince = new Date().getTime();
 
-function status() {
-  return {
-    upSince,
-    status: 'OK',
-    time: new Date().getTime(),
-  };
+@Injectable()
+export class StatusProvider {
+  status() {
+    return {
+      upSince,
+      status: 'OK',
+      time: new Date().getTime(),
+    };
+  }
 }
-
-export default status;

@@ -1,10 +1,14 @@
-import user from '../services/tickettrigger/user';
+import { TicketTriggerUserService } from '../services/tickettrigger/user';
+import { Injectable } from '@nestjs/common';
 
-class UserProvider {
+@Injectable()
+export class UserProvider {
+  constructor(private readonly ttUserService: TicketTriggerUserService) {}
+
   async getUser(userUuid: string) {
     const {
       client: { Name, Birthday },
-    } = await user.getSummary(userUuid);
+    } = await this.ttUserService.getSummary(userUuid);
 
     const bd = Birthday ? new Date(Birthday) : null;
 
@@ -23,5 +27,3 @@ class UserProvider {
     };
   }
 }
-
-export default new UserProvider();

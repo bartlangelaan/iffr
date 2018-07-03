@@ -1,10 +1,11 @@
-import status from '../providers/status';
+import { StatusProvider } from '../providers/status';
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('status')
 export class StatusController {
+  constructor(private readonly statusProvider: StatusProvider) {}
   @Get()
   status() {
-    return status();
+    return this.statusProvider.status();
   }
 }
