@@ -24,13 +24,12 @@ export function assure(schema: string, thingToValidate: any) {
   const result = validate(schema, thingToValidate);
   if (!result.valid) {
     const errString = result.errors
-      .map(
-        (e, i) =>
-          `ERROR ${i + 1}: ${e.toString()}: \n${inspect(e, { colors: true })}`,
-      )
+      .map((e, i) => `ERROR ${i + 1}: ${e.toString()}: \n${inspect(e)}`)
       .join('\n');
     throw new Error(
-      `An instance of ${schema} is not as expected.\n\n${errString}\n\nFULL INSTANCE:\n\n${thingToValidate}`,
+      `An instance of ${schema} is not as expected.\n\n${errString}\n\nFULL INSTANCE:\n\n${inspect(
+        thingToValidate,
+      )}`,
     );
   }
 }
