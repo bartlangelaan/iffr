@@ -35,7 +35,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.BUILD_TIME': JSON.stringify(new Date().toLocaleString('nl-NL', {timeZone: 'Europe/Amsterdam'})),
     }),
-  ]
+  ],
+  devtool: 'source-map'
 };
 
 module.exports = (env, {mode}) => {
@@ -54,6 +55,6 @@ module.exports = (env, {mode}) => {
   }
   else {
   }
-
+  
   return config;
 }
