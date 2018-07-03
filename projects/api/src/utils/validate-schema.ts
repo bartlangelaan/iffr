@@ -1,4 +1,5 @@
 import { Validator } from 'jsonschema';
+import { inspect } from 'util';
 
 const { definitions } = require('./api-response-schemas.json');
 const validator = new Validator();
@@ -23,10 +24,13 @@ export function assure(schema: string, thingToValidate: any) {
   const result = validate(schema, thingToValidate);
   if (!result.valid) {
     const errString = result.errors
-      .map(e => `${e.toString()} (instance: ${e.instance})`)
+      .map(
+        (e, i) =>
+          `ERROR ${i + 1}: ${e.toString()}: \n${inspect(e, { colors: true })}`,
+      )
       .join('\n');
     throw new Error(
-      `An instance of ${schema} is not as expected.\n\n` + errString,
+      `An instance of ${schema} is not as expected.\n\n${errString}\n\nFULL INSTANCE:\n\n${thingToValidate}`,
     );
   }
 }
