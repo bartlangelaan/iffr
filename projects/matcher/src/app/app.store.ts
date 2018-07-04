@@ -112,7 +112,7 @@ class AppStore {
       action((user: UserResponse) => {
         this.user = user;
       }),
-      this.unauthorize,
+      this.checkForFetchError,
     );
 
     this.fetchFavorites();
@@ -124,7 +124,7 @@ class AppStore {
       action((favorites: FavoritesResponse) => {
         this.favorites = favorites;
       }),
-      this.unauthorize,
+      this.checkForFetchError,
     );
   };
 
@@ -133,8 +133,13 @@ class AppStore {
       action((suggestion: SuggestionResponse) => {
         this.suggestion = suggestion;
       }),
-      this.unauthorize,
+      this.checkForFetchError,
     );
+  };
+
+  checkForFetchError = (error: Error) => {
+    console.log(error);
+    this.unauthorize();
   };
 
   @action.bound
