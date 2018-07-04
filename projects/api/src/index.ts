@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import App from './app';
+import ravenClient from './utils/ravenClient';
 
 declare const module: any;
 
@@ -51,4 +52,12 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 }
-bootstrap();
+
+// We install the Raven client, which means it captures http requests, console logs, etc.
+// The client is created in ./utils/ravenClient.ts because it is also used in the
+// app.interceptor.ts file to log all 500 errors.
+ravenClient.install();
+
+// We use 'context' to execute the bootstrap function, because Raven wants us to bootstrap
+// everything. That should result in better error reporting.
+ravenClient.context(bootstrap);

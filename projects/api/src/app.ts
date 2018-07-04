@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { StatusController } from './controllers/status.controller';
 import { OAuth2Controller } from './controllers/oauth2.controller';
 import { UsersController } from './controllers/users.controller';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ApplicationGuard } from './app.guard';
 import { FilmsController } from './controllers/films.controller';
 import { FavoritesProvider } from './providers/favorites';
@@ -13,6 +13,7 @@ import { DrupalFavoritesService } from './services/drupal/favorites';
 import { FionaPublicationApiService } from './services/fiona/publication-api';
 import { TicketTriggerLoginService } from './services/tickettrigger/login';
 import { TicketTriggerUserService } from './services/tickettrigger/user';
+import { IFFRInterceptor } from './app.interceptor';
 
 @Module({
   controllers: [
@@ -25,6 +26,10 @@ import { TicketTriggerUserService } from './services/tickettrigger/user';
     {
       provide: APP_GUARD,
       useClass: ApplicationGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: IFFRInterceptor,
     },
     DrupalFavoritesService,
     FionaPublicationApiService,
