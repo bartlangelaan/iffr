@@ -44,7 +44,7 @@ export class UsersController {
   @RequirePermissions('this_user.favorites.view')
   @ApiUseTags('favorites')
   favorites(@User() user: string) {
-    return this.filmsProvider.get(user);
+    return this.favoritesProvider.get(user);
   }
 
   @Post('/:user/favorites')
